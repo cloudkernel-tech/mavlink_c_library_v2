@@ -1138,6 +1138,20 @@ typedef enum MAV_VTOL_STATE
 } MAV_VTOL_STATE;
 #endif
 
+/** @brief Enumeration of flying rover states */
+#ifndef HAVE_ENUM_MAV_FLYINGROVER_STATE
+#define HAVE_ENUM_MAV_FLYINGROVER_STATE
+typedef enum MAV_FLYINGROVER_STATE
+{
+   MAV_FLYINGROVER_STATE_UNDEFINED=0, /* MAV is not configured as VTOL | */
+   MAV_FLYINGROVER_STATE_ROVER=1, /* VTOL is in transition from multicopter to fixed-wing | */
+   MAV_FLYINGROVER_STATE_MC=2, /* VTOL is in transition from fixed-wing to multicopter | */
+   MAV_FLYINGROVER_STATE_TRANSITION_TO_MC=3, /* VTOL is in multicopter state | */
+   MAV_FLYINGROVER_STATE_TRANSITION_TO_ROVER=4, /* VTOL is in fixed-wing state | */
+   MAV_FLYINGROVER_STATE_ENUM_END=5, /*  | */
+} MAV_FLYINGROVER_STATE;
+#endif
+
 /** @brief Enumeration of landed detector states */
 #ifndef HAVE_ENUM_MAV_LANDED_STATE
 #define HAVE_ENUM_MAV_LANDED_STATE

@@ -1080,6 +1080,19 @@ enum class MAV_VTOL_STATE : uint8_t
 //! MAV_VTOL_STATE ENUM_END
 constexpr auto MAV_VTOL_STATE_ENUM_END = 5;
 
+/** @brief Enumeration of flying rover states */
+enum class MAV_FLYINGROVER_STATE
+{
+    UNDEFINED=0, /* MAV is not configured as VTOL | */
+    ROVER=1, /* VTOL is in transition from multicopter to fixed-wing | */
+    MC=2, /* VTOL is in transition from fixed-wing to multicopter | */
+    TRANSITION_TO_MC=3, /* VTOL is in multicopter state | */
+    TRANSITION_TO_ROVER=4, /* VTOL is in fixed-wing state | */
+};
+
+//! MAV_FLYINGROVER_STATE ENUM_END
+constexpr auto MAV_FLYINGROVER_STATE_ENUM_END = 5;
+
 /** @brief Enumeration of landed detector states */
 enum class MAV_LANDED_STATE : uint8_t
 {

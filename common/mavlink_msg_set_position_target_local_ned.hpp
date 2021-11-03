@@ -13,9 +13,9 @@ namespace msg {
  */
 struct SET_POSITION_TARGET_LOCAL_NED : mavlink::Message {
     static constexpr msgid_t MSG_ID = 84;
-    static constexpr size_t LENGTH = 53;
-    static constexpr size_t MIN_LENGTH = 53;
-    static constexpr uint8_t CRC_EXTRA = 143;
+    static constexpr size_t LENGTH = 57;
+    static constexpr size_t MIN_LENGTH = 57;
+    static constexpr uint8_t CRC_EXTRA = 97;
     static constexpr auto NAME = "SET_POSITION_TARGET_LOCAL_NED";
 
 
@@ -35,6 +35,7 @@ struct SET_POSITION_TARGET_LOCAL_NED : mavlink::Message {
     float afz; /*< [m/s/s] Z acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N */
     float yaw; /*< [rad] yaw setpoint */
     float yaw_rate; /*< [rad/s] yaw rate setpoint */
+    float banking_angle; /*< [rad] banking angle setpoint for fixed-wing */
 
 
     inline std::string get_name(void) const override
@@ -68,6 +69,7 @@ struct SET_POSITION_TARGET_LOCAL_NED : mavlink::Message {
         ss << "  afz: " << afz << std::endl;
         ss << "  yaw: " << yaw << std::endl;
         ss << "  yaw_rate: " << yaw_rate << std::endl;
+        ss << "  banking_angle: " << banking_angle << std::endl;
 
         return ss.str();
     }
@@ -88,10 +90,11 @@ struct SET_POSITION_TARGET_LOCAL_NED : mavlink::Message {
         map << afz;                           // offset: 36
         map << yaw;                           // offset: 40
         map << yaw_rate;                      // offset: 44
-        map << type_mask;                     // offset: 48
-        map << target_system;                 // offset: 50
-        map << target_component;              // offset: 51
-        map << coordinate_frame;              // offset: 52
+        map << banking_angle;                 // offset: 48
+        map << type_mask;                     // offset: 52
+        map << target_system;                 // offset: 54
+        map << target_component;              // offset: 55
+        map << coordinate_frame;              // offset: 56
     }
 
     inline void deserialize(mavlink::MsgMap &map) override
@@ -108,10 +111,11 @@ struct SET_POSITION_TARGET_LOCAL_NED : mavlink::Message {
         map >> afz;                           // offset: 36
         map >> yaw;                           // offset: 40
         map >> yaw_rate;                      // offset: 44
-        map >> type_mask;                     // offset: 48
-        map >> target_system;                 // offset: 50
-        map >> target_component;              // offset: 51
-        map >> coordinate_frame;              // offset: 52
+        map >> banking_angle;                 // offset: 48
+        map >> type_mask;                     // offset: 52
+        map >> target_system;                 // offset: 54
+        map >> target_component;              // offset: 55
+        map >> coordinate_frame;              // offset: 56
     }
 };
 

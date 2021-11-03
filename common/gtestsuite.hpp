@@ -5229,10 +5229,10 @@ TEST(common, SET_POSITION_TARGET_LOCAL_NED)
 
     mavlink::common::msg::SET_POSITION_TARGET_LOCAL_NED packet_in{};
     packet_in.time_boot_ms = 963497464;
-    packet_in.target_system = 27;
-    packet_in.target_component = 94;
-    packet_in.coordinate_frame = 161;
-    packet_in.type_mask = 19731;
+    packet_in.target_system = 39;
+    packet_in.target_component = 106;
+    packet_in.coordinate_frame = 173;
+    packet_in.type_mask = 19939;
     packet_in.x = 45.0;
     packet_in.y = 73.0;
     packet_in.z = 101.0;
@@ -5244,6 +5244,7 @@ TEST(common, SET_POSITION_TARGET_LOCAL_NED)
     packet_in.afz = 269.0;
     packet_in.yaw = 297.0;
     packet_in.yaw_rate = 325.0;
+    packet_in.banking_angle = 353.0;
 
     mavlink::common::msg::SET_POSITION_TARGET_LOCAL_NED packet1{};
     mavlink::common::msg::SET_POSITION_TARGET_LOCAL_NED packet2{};
@@ -5274,6 +5275,7 @@ TEST(common, SET_POSITION_TARGET_LOCAL_NED)
     EXPECT_EQ(packet1.afz, packet2.afz);
     EXPECT_EQ(packet1.yaw, packet2.yaw);
     EXPECT_EQ(packet1.yaw_rate, packet2.yaw_rate);
+    EXPECT_EQ(packet1.banking_angle, packet2.banking_angle);
 }
 
 #ifdef TEST_INTEROP
@@ -5285,15 +5287,15 @@ TEST(common_interop, SET_POSITION_TARGET_LOCAL_NED)
     memset(&msg, 0, sizeof(msg));
 
     mavlink_set_position_target_local_ned_t packet_c {
-         963497464, 45.0, 73.0, 101.0, 129.0, 157.0, 185.0, 213.0, 241.0, 269.0, 297.0, 325.0, 19731, 27, 94, 161
+         963497464, 45.0, 73.0, 101.0, 129.0, 157.0, 185.0, 213.0, 241.0, 269.0, 297.0, 325.0, 353.0, 19939, 39, 106, 173
     };
 
     mavlink::common::msg::SET_POSITION_TARGET_LOCAL_NED packet_in{};
     packet_in.time_boot_ms = 963497464;
-    packet_in.target_system = 27;
-    packet_in.target_component = 94;
-    packet_in.coordinate_frame = 161;
-    packet_in.type_mask = 19731;
+    packet_in.target_system = 39;
+    packet_in.target_component = 106;
+    packet_in.coordinate_frame = 173;
+    packet_in.type_mask = 19939;
     packet_in.x = 45.0;
     packet_in.y = 73.0;
     packet_in.z = 101.0;
@@ -5305,6 +5307,7 @@ TEST(common_interop, SET_POSITION_TARGET_LOCAL_NED)
     packet_in.afz = 269.0;
     packet_in.yaw = 297.0;
     packet_in.yaw_rate = 325.0;
+    packet_in.banking_angle = 353.0;
 
     mavlink::common::msg::SET_POSITION_TARGET_LOCAL_NED packet2{};
 
@@ -5333,6 +5336,7 @@ TEST(common_interop, SET_POSITION_TARGET_LOCAL_NED)
     EXPECT_EQ(packet_in.afz, packet2.afz);
     EXPECT_EQ(packet_in.yaw, packet2.yaw);
     EXPECT_EQ(packet_in.yaw_rate, packet2.yaw_rate);
+    EXPECT_EQ(packet_in.banking_angle, packet2.banking_angle);
 
 #ifdef PRINT_MSG
     PRINT_MSG(msg);

@@ -13,9 +13,9 @@ namespace msg {
  */
 struct SET_ACTUATOR_CONTROL_TARGET : mavlink::Message {
     static constexpr msgid_t MSG_ID = 139;
-    static constexpr size_t LENGTH = 43;
-    static constexpr size_t MIN_LENGTH = 43;
-    static constexpr uint8_t CRC_EXTRA = 168;
+    static constexpr size_t LENGTH = 44;
+    static constexpr size_t MIN_LENGTH = 44;
+    static constexpr uint8_t CRC_EXTRA = 241;
     static constexpr auto NAME = "SET_ACTUATOR_CONTROL_TARGET";
 
 
@@ -24,6 +24,7 @@ struct SET_ACTUATOR_CONTROL_TARGET : mavlink::Message {
     uint8_t target_system; /*<  System ID */
     uint8_t target_component; /*<  Component ID */
     std::array<float, 8> controls; /*<  Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single rotation direction motors is 0..1, negative range for reverse direction. Standard mapping for attitude controls (group 0): (index 0-7): roll, pitch, yaw, throttle, flaps, spoilers, airbrakes, landing gear. Load a pass-through mixer to repurpose them as generic outputs. */
+    uint8_t flag_rover_mode; /*<  Boolean indicating whether the direct actuator control is in the rover mode, true will force direct actuator control, added for kerloud product */
 
 
     inline std::string get_name(void) const override
@@ -46,6 +47,7 @@ struct SET_ACTUATOR_CONTROL_TARGET : mavlink::Message {
         ss << "  target_system: " << +target_system << std::endl;
         ss << "  target_component: " << +target_component << std::endl;
         ss << "  controls: [" << to_string(controls) << "]" << std::endl;
+        ss << "  flag_rover_mode: " << +flag_rover_mode << std::endl;
 
         return ss.str();
     }
@@ -59,6 +61,7 @@ struct SET_ACTUATOR_CONTROL_TARGET : mavlink::Message {
         map << group_mlx;                     // offset: 40
         map << target_system;                 // offset: 41
         map << target_component;              // offset: 42
+        map << flag_rover_mode;               // offset: 43
     }
 
     inline void deserialize(mavlink::MsgMap &map) override
@@ -68,6 +71,7 @@ struct SET_ACTUATOR_CONTROL_TARGET : mavlink::Message {
         map >> group_mlx;                     // offset: 40
         map >> target_system;                 // offset: 41
         map >> target_component;              // offset: 42
+        map >> flag_rover_mode;               // offset: 43
     }
 };
 

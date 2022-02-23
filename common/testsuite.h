@@ -6739,7 +6739,7 @@ static void mavlink_test_set_actuator_control_target(uint8_t system_id, uint8_t 
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_set_actuator_control_target_t packet_in = {
-        93372036854775807ULL,{ 73.0, 74.0, 75.0, 76.0, 77.0, 78.0, 79.0, 80.0 },125,192,3
+        93372036854775807ULL,{ 73.0, 74.0, 75.0, 76.0, 77.0, 78.0, 79.0, 80.0 },125,192,3,70
     };
     mavlink_set_actuator_control_target_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -6747,6 +6747,7 @@ static void mavlink_test_set_actuator_control_target(uint8_t system_id, uint8_t 
         packet1.group_mlx = packet_in.group_mlx;
         packet1.target_system = packet_in.target_system;
         packet1.target_component = packet_in.target_component;
+        packet1.flag_rover_mode = packet_in.flag_rover_mode;
         
         mav_array_memcpy(packet1.controls, packet_in.controls, sizeof(float)*8);
         
@@ -6762,12 +6763,12 @@ static void mavlink_test_set_actuator_control_target(uint8_t system_id, uint8_t 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_set_actuator_control_target_pack(system_id, component_id, &msg , packet1.time_usec , packet1.group_mlx , packet1.target_system , packet1.target_component , packet1.controls );
+    mavlink_msg_set_actuator_control_target_pack(system_id, component_id, &msg , packet1.time_usec , packet1.group_mlx , packet1.target_system , packet1.target_component , packet1.controls , packet1.flag_rover_mode );
     mavlink_msg_set_actuator_control_target_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_set_actuator_control_target_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.group_mlx , packet1.target_system , packet1.target_component , packet1.controls );
+    mavlink_msg_set_actuator_control_target_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.group_mlx , packet1.target_system , packet1.target_component , packet1.controls , packet1.flag_rover_mode );
     mavlink_msg_set_actuator_control_target_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -6780,7 +6781,7 @@ static void mavlink_test_set_actuator_control_target(uint8_t system_id, uint8_t 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_set_actuator_control_target_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.group_mlx , packet1.target_system , packet1.target_component , packet1.controls );
+    mavlink_msg_set_actuator_control_target_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.group_mlx , packet1.target_system , packet1.target_component , packet1.controls , packet1.flag_rover_mode );
     mavlink_msg_set_actuator_control_target_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

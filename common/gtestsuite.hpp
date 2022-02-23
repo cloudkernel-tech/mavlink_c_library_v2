@@ -9565,6 +9565,7 @@ TEST(common, SET_ACTUATOR_CONTROL_TARGET)
     packet_in.target_system = 192;
     packet_in.target_component = 3;
     packet_in.controls = {{ 73.0, 74.0, 75.0, 76.0, 77.0, 78.0, 79.0, 80.0 }};
+    packet_in.flag_rover_mode = 70;
 
     mavlink::common::msg::SET_ACTUATOR_CONTROL_TARGET packet1{};
     mavlink::common::msg::SET_ACTUATOR_CONTROL_TARGET packet2{};
@@ -9584,6 +9585,7 @@ TEST(common, SET_ACTUATOR_CONTROL_TARGET)
     EXPECT_EQ(packet1.target_system, packet2.target_system);
     EXPECT_EQ(packet1.target_component, packet2.target_component);
     EXPECT_EQ(packet1.controls, packet2.controls);
+    EXPECT_EQ(packet1.flag_rover_mode, packet2.flag_rover_mode);
 }
 
 #ifdef TEST_INTEROP
@@ -9595,7 +9597,7 @@ TEST(common_interop, SET_ACTUATOR_CONTROL_TARGET)
     memset(&msg, 0, sizeof(msg));
 
     mavlink_set_actuator_control_target_t packet_c {
-         93372036854775807ULL, { 73.0, 74.0, 75.0, 76.0, 77.0, 78.0, 79.0, 80.0 }, 125, 192, 3
+         93372036854775807ULL, { 73.0, 74.0, 75.0, 76.0, 77.0, 78.0, 79.0, 80.0 }, 125, 192, 3, 70
     };
 
     mavlink::common::msg::SET_ACTUATOR_CONTROL_TARGET packet_in{};
@@ -9604,6 +9606,7 @@ TEST(common_interop, SET_ACTUATOR_CONTROL_TARGET)
     packet_in.target_system = 192;
     packet_in.target_component = 3;
     packet_in.controls = {{ 73.0, 74.0, 75.0, 76.0, 77.0, 78.0, 79.0, 80.0 }};
+    packet_in.flag_rover_mode = 70;
 
     mavlink::common::msg::SET_ACTUATOR_CONTROL_TARGET packet2{};
 
@@ -9621,6 +9624,7 @@ TEST(common_interop, SET_ACTUATOR_CONTROL_TARGET)
     EXPECT_EQ(packet_in.target_system, packet2.target_system);
     EXPECT_EQ(packet_in.target_component, packet2.target_component);
     EXPECT_EQ(packet_in.controls, packet2.controls);
+    EXPECT_EQ(packet_in.flag_rover_mode, packet2.flag_rover_mode);
 
 #ifdef PRINT_MSG
     PRINT_MSG(msg);

@@ -10,15 +10,16 @@ typedef struct __mavlink_set_actuator_control_target_t {
  uint8_t group_mlx; /*<  Actuator group. The "_mlx" indicates this is a multi-instance message and a MAVLink parser should use this field to difference between instances.*/
  uint8_t target_system; /*<  System ID*/
  uint8_t target_component; /*<  Component ID*/
+ uint8_t flag_rover_mode; /*<  Boolean indicating whether the direct actuator control is in the rover mode, true will force direct actuator control, added for kerloud product*/
 } mavlink_set_actuator_control_target_t;
 
-#define MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN 43
-#define MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_MIN_LEN 43
-#define MAVLINK_MSG_ID_139_LEN 43
-#define MAVLINK_MSG_ID_139_MIN_LEN 43
+#define MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN 44
+#define MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_MIN_LEN 44
+#define MAVLINK_MSG_ID_139_LEN 44
+#define MAVLINK_MSG_ID_139_MIN_LEN 44
 
-#define MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_CRC 168
-#define MAVLINK_MSG_ID_139_CRC 168
+#define MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_CRC 241
+#define MAVLINK_MSG_ID_139_CRC 241
 
 #define MAVLINK_MSG_SET_ACTUATOR_CONTROL_TARGET_FIELD_CONTROLS_LEN 8
 
@@ -26,23 +27,25 @@ typedef struct __mavlink_set_actuator_control_target_t {
 #define MAVLINK_MESSAGE_INFO_SET_ACTUATOR_CONTROL_TARGET { \
     139, \
     "SET_ACTUATOR_CONTROL_TARGET", \
-    5, \
+    6, \
     {  { "time_usec", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_set_actuator_control_target_t, time_usec) }, \
          { "group_mlx", NULL, MAVLINK_TYPE_UINT8_T, 0, 40, offsetof(mavlink_set_actuator_control_target_t, group_mlx) }, \
          { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 41, offsetof(mavlink_set_actuator_control_target_t, target_system) }, \
          { "target_component", NULL, MAVLINK_TYPE_UINT8_T, 0, 42, offsetof(mavlink_set_actuator_control_target_t, target_component) }, \
          { "controls", NULL, MAVLINK_TYPE_FLOAT, 8, 8, offsetof(mavlink_set_actuator_control_target_t, controls) }, \
+         { "flag_rover_mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 43, offsetof(mavlink_set_actuator_control_target_t, flag_rover_mode) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_SET_ACTUATOR_CONTROL_TARGET { \
     "SET_ACTUATOR_CONTROL_TARGET", \
-    5, \
+    6, \
     {  { "time_usec", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_set_actuator_control_target_t, time_usec) }, \
          { "group_mlx", NULL, MAVLINK_TYPE_UINT8_T, 0, 40, offsetof(mavlink_set_actuator_control_target_t, group_mlx) }, \
          { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 41, offsetof(mavlink_set_actuator_control_target_t, target_system) }, \
          { "target_component", NULL, MAVLINK_TYPE_UINT8_T, 0, 42, offsetof(mavlink_set_actuator_control_target_t, target_component) }, \
          { "controls", NULL, MAVLINK_TYPE_FLOAT, 8, 8, offsetof(mavlink_set_actuator_control_target_t, controls) }, \
+         { "flag_rover_mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 43, offsetof(mavlink_set_actuator_control_target_t, flag_rover_mode) }, \
          } \
 }
 #endif
@@ -58,10 +61,11 @@ typedef struct __mavlink_set_actuator_control_target_t {
  * @param target_system  System ID
  * @param target_component  Component ID
  * @param controls  Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single rotation direction motors is 0..1, negative range for reverse direction. Standard mapping for attitude controls (group 0): (index 0-7): roll, pitch, yaw, throttle, flaps, spoilers, airbrakes, landing gear. Load a pass-through mixer to repurpose them as generic outputs.
+ * @param flag_rover_mode  Boolean indicating whether the direct actuator control is in the rover mode, true will force direct actuator control, added for kerloud product
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_set_actuator_control_target_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint64_t time_usec, uint8_t group_mlx, uint8_t target_system, uint8_t target_component, const float *controls)
+                               uint64_t time_usec, uint8_t group_mlx, uint8_t target_system, uint8_t target_component, const float *controls, uint8_t flag_rover_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN];
@@ -69,6 +73,7 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_pack(uint8_t syst
     _mav_put_uint8_t(buf, 40, group_mlx);
     _mav_put_uint8_t(buf, 41, target_system);
     _mav_put_uint8_t(buf, 42, target_component);
+    _mav_put_uint8_t(buf, 43, flag_rover_mode);
     _mav_put_float_array(buf, 8, controls, 8);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN);
 #else
@@ -77,6 +82,7 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_pack(uint8_t syst
     packet.group_mlx = group_mlx;
     packet.target_system = target_system;
     packet.target_component = target_component;
+    packet.flag_rover_mode = flag_rover_mode;
     mav_array_memcpy(packet.controls, controls, sizeof(float)*8);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN);
 #endif
@@ -96,11 +102,12 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_pack(uint8_t syst
  * @param target_system  System ID
  * @param target_component  Component ID
  * @param controls  Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single rotation direction motors is 0..1, negative range for reverse direction. Standard mapping for attitude controls (group 0): (index 0-7): roll, pitch, yaw, throttle, flaps, spoilers, airbrakes, landing gear. Load a pass-through mixer to repurpose them as generic outputs.
+ * @param flag_rover_mode  Boolean indicating whether the direct actuator control is in the rover mode, true will force direct actuator control, added for kerloud product
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_set_actuator_control_target_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint64_t time_usec,uint8_t group_mlx,uint8_t target_system,uint8_t target_component,const float *controls)
+                                   uint64_t time_usec,uint8_t group_mlx,uint8_t target_system,uint8_t target_component,const float *controls,uint8_t flag_rover_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN];
@@ -108,6 +115,7 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_pack_chan(uint8_t
     _mav_put_uint8_t(buf, 40, group_mlx);
     _mav_put_uint8_t(buf, 41, target_system);
     _mav_put_uint8_t(buf, 42, target_component);
+    _mav_put_uint8_t(buf, 43, flag_rover_mode);
     _mav_put_float_array(buf, 8, controls, 8);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN);
 #else
@@ -116,6 +124,7 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_pack_chan(uint8_t
     packet.group_mlx = group_mlx;
     packet.target_system = target_system;
     packet.target_component = target_component;
+    packet.flag_rover_mode = flag_rover_mode;
     mav_array_memcpy(packet.controls, controls, sizeof(float)*8);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN);
 #endif
@@ -134,7 +143,7 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_pack_chan(uint8_t
  */
 static inline uint16_t mavlink_msg_set_actuator_control_target_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_set_actuator_control_target_t* set_actuator_control_target)
 {
-    return mavlink_msg_set_actuator_control_target_pack(system_id, component_id, msg, set_actuator_control_target->time_usec, set_actuator_control_target->group_mlx, set_actuator_control_target->target_system, set_actuator_control_target->target_component, set_actuator_control_target->controls);
+    return mavlink_msg_set_actuator_control_target_pack(system_id, component_id, msg, set_actuator_control_target->time_usec, set_actuator_control_target->group_mlx, set_actuator_control_target->target_system, set_actuator_control_target->target_component, set_actuator_control_target->controls, set_actuator_control_target->flag_rover_mode);
 }
 
 /**
@@ -148,7 +157,7 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_encode(uint8_t sy
  */
 static inline uint16_t mavlink_msg_set_actuator_control_target_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_set_actuator_control_target_t* set_actuator_control_target)
 {
-    return mavlink_msg_set_actuator_control_target_pack_chan(system_id, component_id, chan, msg, set_actuator_control_target->time_usec, set_actuator_control_target->group_mlx, set_actuator_control_target->target_system, set_actuator_control_target->target_component, set_actuator_control_target->controls);
+    return mavlink_msg_set_actuator_control_target_pack_chan(system_id, component_id, chan, msg, set_actuator_control_target->time_usec, set_actuator_control_target->group_mlx, set_actuator_control_target->target_system, set_actuator_control_target->target_component, set_actuator_control_target->controls, set_actuator_control_target->flag_rover_mode);
 }
 
 /**
@@ -160,10 +169,11 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_encode_chan(uint8
  * @param target_system  System ID
  * @param target_component  Component ID
  * @param controls  Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single rotation direction motors is 0..1, negative range for reverse direction. Standard mapping for attitude controls (group 0): (index 0-7): roll, pitch, yaw, throttle, flaps, spoilers, airbrakes, landing gear. Load a pass-through mixer to repurpose them as generic outputs.
+ * @param flag_rover_mode  Boolean indicating whether the direct actuator control is in the rover mode, true will force direct actuator control, added for kerloud product
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_set_actuator_control_target_send(mavlink_channel_t chan, uint64_t time_usec, uint8_t group_mlx, uint8_t target_system, uint8_t target_component, const float *controls)
+static inline void mavlink_msg_set_actuator_control_target_send(mavlink_channel_t chan, uint64_t time_usec, uint8_t group_mlx, uint8_t target_system, uint8_t target_component, const float *controls, uint8_t flag_rover_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN];
@@ -171,6 +181,7 @@ static inline void mavlink_msg_set_actuator_control_target_send(mavlink_channel_
     _mav_put_uint8_t(buf, 40, group_mlx);
     _mav_put_uint8_t(buf, 41, target_system);
     _mav_put_uint8_t(buf, 42, target_component);
+    _mav_put_uint8_t(buf, 43, flag_rover_mode);
     _mav_put_float_array(buf, 8, controls, 8);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET, buf, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_CRC);
 #else
@@ -179,6 +190,7 @@ static inline void mavlink_msg_set_actuator_control_target_send(mavlink_channel_
     packet.group_mlx = group_mlx;
     packet.target_system = target_system;
     packet.target_component = target_component;
+    packet.flag_rover_mode = flag_rover_mode;
     mav_array_memcpy(packet.controls, controls, sizeof(float)*8);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET, (const char *)&packet, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_CRC);
 #endif
@@ -192,7 +204,7 @@ static inline void mavlink_msg_set_actuator_control_target_send(mavlink_channel_
 static inline void mavlink_msg_set_actuator_control_target_send_struct(mavlink_channel_t chan, const mavlink_set_actuator_control_target_t* set_actuator_control_target)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_set_actuator_control_target_send(chan, set_actuator_control_target->time_usec, set_actuator_control_target->group_mlx, set_actuator_control_target->target_system, set_actuator_control_target->target_component, set_actuator_control_target->controls);
+    mavlink_msg_set_actuator_control_target_send(chan, set_actuator_control_target->time_usec, set_actuator_control_target->group_mlx, set_actuator_control_target->target_system, set_actuator_control_target->target_component, set_actuator_control_target->controls, set_actuator_control_target->flag_rover_mode);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET, (const char *)set_actuator_control_target, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_CRC);
 #endif
@@ -206,7 +218,7 @@ static inline void mavlink_msg_set_actuator_control_target_send_struct(mavlink_c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_set_actuator_control_target_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_usec, uint8_t group_mlx, uint8_t target_system, uint8_t target_component, const float *controls)
+static inline void mavlink_msg_set_actuator_control_target_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_usec, uint8_t group_mlx, uint8_t target_system, uint8_t target_component, const float *controls, uint8_t flag_rover_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -214,6 +226,7 @@ static inline void mavlink_msg_set_actuator_control_target_send_buf(mavlink_mess
     _mav_put_uint8_t(buf, 40, group_mlx);
     _mav_put_uint8_t(buf, 41, target_system);
     _mav_put_uint8_t(buf, 42, target_component);
+    _mav_put_uint8_t(buf, 43, flag_rover_mode);
     _mav_put_float_array(buf, 8, controls, 8);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET, buf, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_CRC);
 #else
@@ -222,6 +235,7 @@ static inline void mavlink_msg_set_actuator_control_target_send_buf(mavlink_mess
     packet->group_mlx = group_mlx;
     packet->target_system = target_system;
     packet->target_component = target_component;
+    packet->flag_rover_mode = flag_rover_mode;
     mav_array_memcpy(packet->controls, controls, sizeof(float)*8);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET, (const char *)packet, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_CRC);
 #endif
@@ -284,6 +298,16 @@ static inline uint16_t mavlink_msg_set_actuator_control_target_get_controls(cons
 }
 
 /**
+ * @brief Get field flag_rover_mode from set_actuator_control_target message
+ *
+ * @return  Boolean indicating whether the direct actuator control is in the rover mode, true will force direct actuator control, added for kerloud product
+ */
+static inline uint8_t mavlink_msg_set_actuator_control_target_get_flag_rover_mode(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  43);
+}
+
+/**
  * @brief Decode a set_actuator_control_target message into a struct
  *
  * @param msg The message to decode
@@ -297,6 +321,7 @@ static inline void mavlink_msg_set_actuator_control_target_decode(const mavlink_
     set_actuator_control_target->group_mlx = mavlink_msg_set_actuator_control_target_get_group_mlx(msg);
     set_actuator_control_target->target_system = mavlink_msg_set_actuator_control_target_get_target_system(msg);
     set_actuator_control_target->target_component = mavlink_msg_set_actuator_control_target_get_target_component(msg);
+    set_actuator_control_target->flag_rover_mode = mavlink_msg_set_actuator_control_target_get_flag_rover_mode(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN? msg->len : MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN;
         memset(set_actuator_control_target, 0, MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET_LEN);

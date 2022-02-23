@@ -652,6 +652,7 @@ typedef enum MAV_CMD
    MAV_CMD_ARM_AUTHORIZATION_REQUEST=3001, /* Request authorization to arm the vehicle to a external entity, the arm authorizer is responsible to request all data that is needs from the vehicle before authorize or deny the request. If approved the progress of command_ack message should be set with period of time that this authorization is valid in seconds or in case it was denied it should be set with one of the reasons in ARM_AUTH_DENIED_REASON.
          |Vehicle system id, this way ground station can request arm authorization on behalf of any vehicle| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
    MAV_CMD_DO_FLYINGROVER_TRANSITION=3100, /* Request flying rover transition |The target flying rover state. Only MAV_FLYINGROVER_STATE_MC and MAV_FLYINGROVER_STATE_ROVER can be used.| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
+   MAV_CMD_SET_ROVER_FORWARD_REVERSE_DRIVING=3101, /* Set forward or reverse driving status for rover mode  |The forward/reverse driving state in rover mode, set 1 for forward, 0 for reverse| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
    MAV_CMD_SET_GUIDED_SUBMODE_STANDARD=4000, /* This command sets the submode to standard guided when vehicle is in guided mode. The vehicle holds position and altitude and the user can input the desired velocities along all three axes.
                    |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
    MAV_CMD_SET_GUIDED_SUBMODE_CIRCLE=4001, /* This command sets submode circle when vehicle is in guided mode. Vehicle flies along a circle facing the center of the circle. The user can input the velocity along the circle and change the radius. If no input is given the vehicle will hold position.
@@ -1144,11 +1145,11 @@ typedef enum MAV_VTOL_STATE
 #define HAVE_ENUM_MAV_FLYINGROVER_STATE
 typedef enum MAV_FLYINGROVER_STATE
 {
-   MAV_FLYINGROVER_STATE_UNDEFINED=0, /* MAV is not configured as VTOL | */
-   MAV_FLYINGROVER_STATE_ROVER=1, /* VTOL is in transition from multicopter to fixed-wing | */
-   MAV_FLYINGROVER_STATE_MC=2, /* VTOL is in transition from fixed-wing to multicopter | */
-   MAV_FLYINGROVER_STATE_TRANSITION_TO_MC=3, /* VTOL is in multicopter state | */
-   MAV_FLYINGROVER_STATE_TRANSITION_TO_ROVER=4, /* VTOL is in fixed-wing state | */
+   MAV_FLYINGROVER_STATE_UNDEFINED=0, /* MAV is not configured as flyingrover | */
+   MAV_FLYINGROVER_STATE_ROVER=1, /* flyingrover is rover state | */
+   MAV_FLYINGROVER_STATE_MC=2, /* flyingrover is in multicopter state | */
+   MAV_FLYINGROVER_STATE_TRANSITION_TO_MC=3, /* flyingrover is in transition from rover to multicopter | */
+   MAV_FLYINGROVER_STATE_TRANSITION_TO_ROVER=4, /* flyingrover is in transition from multicopter to rover | */
    MAV_FLYINGROVER_STATE_ENUM_END=5, /*  | */
 } MAV_FLYINGROVER_STATE;
 #endif

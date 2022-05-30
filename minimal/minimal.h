@@ -105,7 +105,8 @@ typedef enum MAV_TYPE
    MAV_TYPE_ODID=34, /* Open Drone ID. See https://mavlink.io/en/services/opendroneid.html. | */
    MAV_TYPE_DECAROTOR=35, /* Decarotor | */
    MAV_TYPE_TRICOPTER_FLYINGROVER=36, /* Tricopter flying rover | */
-   MAV_TYPE_ENUM_END=37, /*  | */
+   MAV_TYPE_QUADCOPTER_FLYINGROVER=37, /* Quadcopter flying rover | */
+   MAV_TYPE_ENUM_END=38, /*  | */
 } MAV_TYPE;
 #endif
 

@@ -98,10 +98,11 @@ enum class MAV_TYPE : uint8_t
     ODID=34, /* Open Drone ID. See https://mavlink.io/en/services/opendroneid.html. | */
     DECAROTOR=35, /* Decarotor | */
     TRICOPTER_FLYINGROVER=36, /* Tricopter flying rover | */
+    QUADCOPTER_FLYINGROVER=37, /* Quadcopter flying rover | */
 };
 
 //! MAV_TYPE ENUM_END
-constexpr auto MAV_TYPE_ENUM_END = 37;
+constexpr auto MAV_TYPE_ENUM_END = 38;
 
 /** @brief These flags encode the MAV mode. */
 enum class MAV_MODE_FLAG : uint8_t

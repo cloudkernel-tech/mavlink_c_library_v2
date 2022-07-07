@@ -510,6 +510,8 @@ enum class MAV_CMD : uint16_t
     NAV_SPLINE_WAYPOINT=82, /* Navigate to waypoint using a spline path. |Hold time. (ignored by fixed wing, time to stay at waypoint for rotary wing)| Empty| Empty| Empty| Latitude/X of goal| Longitude/Y of goal| Altitude/Z of goal|  */
     NAV_VTOL_TAKEOFF=84, /* Takeoff from ground using VTOL mode, and transition to forward flight with specified heading. The command should be ignored by vehicles that dont support both VTOL and fixed-wing flight (multicopters, boats,etc.). |Empty| Front transition heading.| Empty| Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).| Latitude| Longitude| Altitude|  */
     NAV_VTOL_LAND=85, /* Land using VTOL mode |Empty| Empty| Approach altitude (with the same reference as the Altitude field). NaN if unspecified.| Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).| Latitude| Longitude| Altitude (ground level)|  */
+    NAV_FLYINGROVER_TAKEOFF=86, /* Takeoff from ground using flying rover mode, and transition to multicopter flight with specified heading. |Empty| Front transition heading.| Empty| Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).| Latitude| Longitude| Altitude|  */
+    NAV_FLYINGROVER_LAND=87, /* Land using flyingrover mode |Empty| Empty| Approach altitude (with the same reference as the Altitude field). NaN if unspecified.| Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).| Latitude| Longitude| Altitude (ground level)|  */
     NAV_GUIDED_ENABLE=92, /* hand control over to an external controller |On / Off (> 0.5f on)| Empty| Empty| Empty| Empty| Empty| Empty|  */
     NAV_DELAY=93, /* Delay the next navigation command a number of seconds or until a specified time |Delay (-1 to enable time-of-day fields)| hour (24h format, UTC, -1 to ignore)| minute (24h format, UTC, -1 to ignore)| second (24h format, UTC, -1 to ignore)| Empty| Empty| Empty|  */
     NAV_PAYLOAD_PLACE=94, /* Descend and place payload. Vehicle moves to specified location, descends until it detects a hanging payload has reached the ground, and then releases the payload. If ground is not detected before the reaching the maximum descent value (param1), the command will complete without releasing the payload. |Maximum distance to descend.| Empty| Empty| Empty| Latitude| Longitude| Altitude|  */
@@ -1319,6 +1321,19 @@ enum class VTOL_TRANSITION_HEADING
 
 //! VTOL_TRANSITION_HEADING ENUM_END
 constexpr auto VTOL_TRANSITION_HEADING_ENUM_END = 5;
+
+/** @brief Direction of VTOL transition */
+enum class FLYINGROVER_TRANSITION_HEADING
+{
+    VEHICLE_DEFAULT=0, /* Respect the heading configuration of the vehicle. | */
+    NEXT_WAYPOINT=1, /* Use the heading pointing towards the next waypoint. | */
+    TAKEOFF=2, /* Use the heading on takeoff (while sitting on the ground). | */
+    SPECIFIED=3, /* Use the specified heading in parameter 4. | */
+    ANY=4, /* Use the current heading when reaching takeoff altitude (potentially facing the wind when weather-vaning is active). | */
+};
+
+//! FLYINGROVER_TRANSITION_HEADING ENUM_END
+constexpr auto FLYINGROVER_TRANSITION_HEADING_ENUM_END = 5;
 
 /** @brief Camera capability flags (Bitmap) */
 enum class CAMERA_CAP_FLAGS : uint32_t

@@ -16914,6 +16914,89 @@ TEST(common_interop, UTM_GLOBAL_POSITION)
 }
 #endif
 
+TEST(common, AVOIDANCE_STATUS)
+{
+    mavlink::mavlink_message_t msg;
+    mavlink::MsgMap map1(msg);
+    mavlink::MsgMap map2(msg);
+
+    mavlink::common::msg::AVOIDANCE_STATUS packet_in{};
+    packet_in.flag_obstacle_in_far_front = 5;
+    packet_in.flag_obstacle_far_nearby = 72;
+    packet_in.flag_obstacle_in_front = 139;
+    packet_in.flag_obstacle_in_rear = 206;
+    packet_in.flag_obstacle_nearby = 17;
+    packet_in.flag_nav_local_plan_valid = 84;
+    packet_in.flag_laser_scan_data_valid = 151;
+
+    mavlink::common::msg::AVOIDANCE_STATUS packet1{};
+    mavlink::common::msg::AVOIDANCE_STATUS packet2{};
+
+    packet1 = packet_in;
+
+    //std::cout << packet1.to_yaml() << std::endl;
+
+    packet1.serialize(map1);
+
+    mavlink::mavlink_finalize_message(&msg, 1, 1, packet1.MIN_LENGTH, packet1.LENGTH, packet1.CRC_EXTRA);
+
+    packet2.deserialize(map2);
+
+    EXPECT_EQ(packet1.flag_obstacle_in_far_front, packet2.flag_obstacle_in_far_front);
+    EXPECT_EQ(packet1.flag_obstacle_far_nearby, packet2.flag_obstacle_far_nearby);
+    EXPECT_EQ(packet1.flag_obstacle_in_front, packet2.flag_obstacle_in_front);
+    EXPECT_EQ(packet1.flag_obstacle_in_rear, packet2.flag_obstacle_in_rear);
+    EXPECT_EQ(packet1.flag_obstacle_nearby, packet2.flag_obstacle_nearby);
+    EXPECT_EQ(packet1.flag_nav_local_plan_valid, packet2.flag_nav_local_plan_valid);
+    EXPECT_EQ(packet1.flag_laser_scan_data_valid, packet2.flag_laser_scan_data_valid);
+}
+
+#ifdef TEST_INTEROP
+TEST(common_interop, AVOIDANCE_STATUS)
+{
+    mavlink_message_t msg;
+
+    // to get nice print
+    memset(&msg, 0, sizeof(msg));
+
+    mavlink_avoidance_status_t packet_c {
+         5, 72, 139, 206, 17, 84, 151
+    };
+
+    mavlink::common::msg::AVOIDANCE_STATUS packet_in{};
+    packet_in.flag_obstacle_in_far_front = 5;
+    packet_in.flag_obstacle_far_nearby = 72;
+    packet_in.flag_obstacle_in_front = 139;
+    packet_in.flag_obstacle_in_rear = 206;
+    packet_in.flag_obstacle_nearby = 17;
+    packet_in.flag_nav_local_plan_valid = 84;
+    packet_in.flag_laser_scan_data_valid = 151;
+
+    mavlink::common::msg::AVOIDANCE_STATUS packet2{};
+
+    mavlink_msg_avoidance_status_encode(1, 1, &msg, &packet_c);
+
+    // simulate message-handling callback
+    [&packet2](const mavlink_message_t *cmsg) {
+        MsgMap map2(cmsg);
+
+        packet2.deserialize(map2);
+    } (&msg);
+
+    EXPECT_EQ(packet_in.flag_obstacle_in_far_front, packet2.flag_obstacle_in_far_front);
+    EXPECT_EQ(packet_in.flag_obstacle_far_nearby, packet2.flag_obstacle_far_nearby);
+    EXPECT_EQ(packet_in.flag_obstacle_in_front, packet2.flag_obstacle_in_front);
+    EXPECT_EQ(packet_in.flag_obstacle_in_rear, packet2.flag_obstacle_in_rear);
+    EXPECT_EQ(packet_in.flag_obstacle_nearby, packet2.flag_obstacle_nearby);
+    EXPECT_EQ(packet_in.flag_nav_local_plan_valid, packet2.flag_nav_local_plan_valid);
+    EXPECT_EQ(packet_in.flag_laser_scan_data_valid, packet2.flag_laser_scan_data_valid);
+
+#ifdef PRINT_MSG
+    PRINT_MSG(msg);
+#endif
+}
+#endif
+
 TEST(common, DEBUG_FLOAT_ARRAY)
 {
     mavlink::mavlink_message_t msg;

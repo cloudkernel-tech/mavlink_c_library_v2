@@ -16997,6 +16997,69 @@ TEST(common_interop, AVOIDANCE_STATUS)
 }
 #endif
 
+TEST(common, VCU_COMMAND_VELOCITY)
+{
+    mavlink::mavlink_message_t msg;
+    mavlink::MsgMap map1(msg);
+    mavlink::MsgMap map2(msg);
+
+    mavlink::common::msg::VCU_COMMAND_VELOCITY packet_in{};
+    packet_in.linear_vel = {{ 17.0, 18.0, 19.0 }};
+    packet_in.angular_vel = {{ 101.0, 102.0, 103.0 }};
+
+    mavlink::common::msg::VCU_COMMAND_VELOCITY packet1{};
+    mavlink::common::msg::VCU_COMMAND_VELOCITY packet2{};
+
+    packet1 = packet_in;
+
+    //std::cout << packet1.to_yaml() << std::endl;
+
+    packet1.serialize(map1);
+
+    mavlink::mavlink_finalize_message(&msg, 1, 1, packet1.MIN_LENGTH, packet1.LENGTH, packet1.CRC_EXTRA);
+
+    packet2.deserialize(map2);
+
+    EXPECT_EQ(packet1.linear_vel, packet2.linear_vel);
+    EXPECT_EQ(packet1.angular_vel, packet2.angular_vel);
+}
+
+#ifdef TEST_INTEROP
+TEST(common_interop, VCU_COMMAND_VELOCITY)
+{
+    mavlink_message_t msg;
+
+    // to get nice print
+    memset(&msg, 0, sizeof(msg));
+
+    mavlink_vcu_command_velocity_t packet_c {
+         { 17.0, 18.0, 19.0 }, { 101.0, 102.0, 103.0 }
+    };
+
+    mavlink::common::msg::VCU_COMMAND_VELOCITY packet_in{};
+    packet_in.linear_vel = {{ 17.0, 18.0, 19.0 }};
+    packet_in.angular_vel = {{ 101.0, 102.0, 103.0 }};
+
+    mavlink::common::msg::VCU_COMMAND_VELOCITY packet2{};
+
+    mavlink_msg_vcu_command_velocity_encode(1, 1, &msg, &packet_c);
+
+    // simulate message-handling callback
+    [&packet2](const mavlink_message_t *cmsg) {
+        MsgMap map2(cmsg);
+
+        packet2.deserialize(map2);
+    } (&msg);
+
+    EXPECT_EQ(packet_in.linear_vel, packet2.linear_vel);
+    EXPECT_EQ(packet_in.angular_vel, packet2.angular_vel);
+
+#ifdef PRINT_MSG
+    PRINT_MSG(msg);
+#endif
+}
+#endif
+
 TEST(common, DEBUG_FLOAT_ARRAY)
 {
     mavlink::mavlink_message_t msg;

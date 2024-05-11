@@ -11837,7 +11837,7 @@ static void mavlink_test_avoidance_status(uint8_t system_id, uint8_t component_i
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_avoidance_status_t packet_in = {
-        5,72,139,206,17,84,151
+        5,72,139,206,17,84,151,218
     };
     mavlink_avoidance_status_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -11846,6 +11846,7 @@ static void mavlink_test_avoidance_status(uint8_t system_id, uint8_t component_i
         packet1.flag_obstacle_in_front = packet_in.flag_obstacle_in_front;
         packet1.flag_obstacle_in_rear = packet_in.flag_obstacle_in_rear;
         packet1.flag_obstacle_nearby = packet_in.flag_obstacle_nearby;
+        packet1.flag_nav_task_active = packet_in.flag_nav_task_active;
         packet1.flag_nav_local_plan_valid = packet_in.flag_nav_local_plan_valid;
         packet1.flag_laser_scan_data_valid = packet_in.flag_laser_scan_data_valid;
         
@@ -11862,12 +11863,12 @@ static void mavlink_test_avoidance_status(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_avoidance_status_pack(system_id, component_id, &msg , packet1.flag_obstacle_in_far_front , packet1.flag_obstacle_far_nearby , packet1.flag_obstacle_in_front , packet1.flag_obstacle_in_rear , packet1.flag_obstacle_nearby , packet1.flag_nav_local_plan_valid , packet1.flag_laser_scan_data_valid );
+    mavlink_msg_avoidance_status_pack(system_id, component_id, &msg , packet1.flag_obstacle_in_far_front , packet1.flag_obstacle_far_nearby , packet1.flag_obstacle_in_front , packet1.flag_obstacle_in_rear , packet1.flag_obstacle_nearby , packet1.flag_nav_task_active , packet1.flag_nav_local_plan_valid , packet1.flag_laser_scan_data_valid );
     mavlink_msg_avoidance_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_avoidance_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.flag_obstacle_in_far_front , packet1.flag_obstacle_far_nearby , packet1.flag_obstacle_in_front , packet1.flag_obstacle_in_rear , packet1.flag_obstacle_nearby , packet1.flag_nav_local_plan_valid , packet1.flag_laser_scan_data_valid );
+    mavlink_msg_avoidance_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.flag_obstacle_in_far_front , packet1.flag_obstacle_far_nearby , packet1.flag_obstacle_in_front , packet1.flag_obstacle_in_rear , packet1.flag_obstacle_nearby , packet1.flag_nav_task_active , packet1.flag_nav_local_plan_valid , packet1.flag_laser_scan_data_valid );
     mavlink_msg_avoidance_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -11880,7 +11881,7 @@ static void mavlink_test_avoidance_status(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_avoidance_status_send(MAVLINK_COMM_1 , packet1.flag_obstacle_in_far_front , packet1.flag_obstacle_far_nearby , packet1.flag_obstacle_in_front , packet1.flag_obstacle_in_rear , packet1.flag_obstacle_nearby , packet1.flag_nav_local_plan_valid , packet1.flag_laser_scan_data_valid );
+    mavlink_msg_avoidance_status_send(MAVLINK_COMM_1 , packet1.flag_obstacle_in_far_front , packet1.flag_obstacle_far_nearby , packet1.flag_obstacle_in_front , packet1.flag_obstacle_in_rear , packet1.flag_obstacle_nearby , packet1.flag_nav_task_active , packet1.flag_nav_local_plan_valid , packet1.flag_laser_scan_data_valid );
     mavlink_msg_avoidance_status_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

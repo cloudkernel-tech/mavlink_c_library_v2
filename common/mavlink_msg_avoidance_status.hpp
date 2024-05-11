@@ -13,9 +13,9 @@ namespace msg {
  */
 struct AVOIDANCE_STATUS : mavlink::Message {
     static constexpr msgid_t MSG_ID = 341;
-    static constexpr size_t LENGTH = 7;
-    static constexpr size_t MIN_LENGTH = 7;
-    static constexpr uint8_t CRC_EXTRA = 246;
+    static constexpr size_t LENGTH = 8;
+    static constexpr size_t MIN_LENGTH = 8;
+    static constexpr uint8_t CRC_EXTRA = 145;
     static constexpr auto NAME = "AVOIDANCE_STATUS";
 
 
@@ -24,6 +24,7 @@ struct AVOIDANCE_STATUS : mavlink::Message {
     uint8_t flag_obstacle_in_front; /*<  Boolean indicating whether an obstacle is at the front of the vehicle */
     uint8_t flag_obstacle_in_rear; /*<  Boolean indicating whether an obstacle is at the back of the vehicle */
     uint8_t flag_obstacle_nearby; /*<  Boolean indicating whether an obstacle is within a distance from the vehicle */
+    uint8_t flag_nav_task_active; /*<  Boolean indicating whether the navigation task is active onboard */
     uint8_t flag_nav_local_plan_valid; /*<  Boolean indicating whether the local plan from navigation is valid for obstacle avoidance */
     uint8_t flag_laser_scan_data_valid; /*<  Boolean indicating whether the laser scan data is valid for obstacle detection */
 
@@ -48,6 +49,7 @@ struct AVOIDANCE_STATUS : mavlink::Message {
         ss << "  flag_obstacle_in_front: " << +flag_obstacle_in_front << std::endl;
         ss << "  flag_obstacle_in_rear: " << +flag_obstacle_in_rear << std::endl;
         ss << "  flag_obstacle_nearby: " << +flag_obstacle_nearby << std::endl;
+        ss << "  flag_nav_task_active: " << +flag_nav_task_active << std::endl;
         ss << "  flag_nav_local_plan_valid: " << +flag_nav_local_plan_valid << std::endl;
         ss << "  flag_laser_scan_data_valid: " << +flag_laser_scan_data_valid << std::endl;
 
@@ -63,8 +65,9 @@ struct AVOIDANCE_STATUS : mavlink::Message {
         map << flag_obstacle_in_front;        // offset: 2
         map << flag_obstacle_in_rear;         // offset: 3
         map << flag_obstacle_nearby;          // offset: 4
-        map << flag_nav_local_plan_valid;     // offset: 5
-        map << flag_laser_scan_data_valid;    // offset: 6
+        map << flag_nav_task_active;          // offset: 5
+        map << flag_nav_local_plan_valid;     // offset: 6
+        map << flag_laser_scan_data_valid;    // offset: 7
     }
 
     inline void deserialize(mavlink::MsgMap &map) override
@@ -74,8 +77,9 @@ struct AVOIDANCE_STATUS : mavlink::Message {
         map >> flag_obstacle_in_front;        // offset: 2
         map >> flag_obstacle_in_rear;         // offset: 3
         map >> flag_obstacle_nearby;          // offset: 4
-        map >> flag_nav_local_plan_valid;     // offset: 5
-        map >> flag_laser_scan_data_valid;    // offset: 6
+        map >> flag_nav_task_active;          // offset: 5
+        map >> flag_nav_local_plan_valid;     // offset: 6
+        map >> flag_laser_scan_data_valid;    // offset: 7
     }
 };
 

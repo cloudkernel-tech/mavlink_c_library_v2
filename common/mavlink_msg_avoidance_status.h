@@ -10,17 +10,18 @@ typedef struct __mavlink_avoidance_status_t {
  uint8_t flag_obstacle_in_front; /*<  Boolean indicating whether an obstacle is at the front of the vehicle*/
  uint8_t flag_obstacle_in_rear; /*<  Boolean indicating whether an obstacle is at the back of the vehicle*/
  uint8_t flag_obstacle_nearby; /*<  Boolean indicating whether an obstacle is within a distance from the vehicle*/
+ uint8_t flag_nav_task_active; /*<  Boolean indicating whether the navigation task is active onboard*/
  uint8_t flag_nav_local_plan_valid; /*<  Boolean indicating whether the local plan from navigation is valid for obstacle avoidance*/
  uint8_t flag_laser_scan_data_valid; /*<  Boolean indicating whether the laser scan data is valid for obstacle detection*/
 } mavlink_avoidance_status_t;
 
-#define MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN 7
-#define MAVLINK_MSG_ID_AVOIDANCE_STATUS_MIN_LEN 7
-#define MAVLINK_MSG_ID_341_LEN 7
-#define MAVLINK_MSG_ID_341_MIN_LEN 7
+#define MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN 8
+#define MAVLINK_MSG_ID_AVOIDANCE_STATUS_MIN_LEN 8
+#define MAVLINK_MSG_ID_341_LEN 8
+#define MAVLINK_MSG_ID_341_MIN_LEN 8
 
-#define MAVLINK_MSG_ID_AVOIDANCE_STATUS_CRC 246
-#define MAVLINK_MSG_ID_341_CRC 246
+#define MAVLINK_MSG_ID_AVOIDANCE_STATUS_CRC 145
+#define MAVLINK_MSG_ID_341_CRC 145
 
 
 
@@ -28,27 +29,29 @@ typedef struct __mavlink_avoidance_status_t {
 #define MAVLINK_MESSAGE_INFO_AVOIDANCE_STATUS { \
     341, \
     "AVOIDANCE_STATUS", \
-    7, \
+    8, \
     {  { "flag_obstacle_in_far_front", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_avoidance_status_t, flag_obstacle_in_far_front) }, \
          { "flag_obstacle_far_nearby", NULL, MAVLINK_TYPE_UINT8_T, 0, 1, offsetof(mavlink_avoidance_status_t, flag_obstacle_far_nearby) }, \
          { "flag_obstacle_in_front", NULL, MAVLINK_TYPE_UINT8_T, 0, 2, offsetof(mavlink_avoidance_status_t, flag_obstacle_in_front) }, \
          { "flag_obstacle_in_rear", NULL, MAVLINK_TYPE_UINT8_T, 0, 3, offsetof(mavlink_avoidance_status_t, flag_obstacle_in_rear) }, \
          { "flag_obstacle_nearby", NULL, MAVLINK_TYPE_UINT8_T, 0, 4, offsetof(mavlink_avoidance_status_t, flag_obstacle_nearby) }, \
-         { "flag_nav_local_plan_valid", NULL, MAVLINK_TYPE_UINT8_T, 0, 5, offsetof(mavlink_avoidance_status_t, flag_nav_local_plan_valid) }, \
-         { "flag_laser_scan_data_valid", NULL, MAVLINK_TYPE_UINT8_T, 0, 6, offsetof(mavlink_avoidance_status_t, flag_laser_scan_data_valid) }, \
+         { "flag_nav_task_active", NULL, MAVLINK_TYPE_UINT8_T, 0, 5, offsetof(mavlink_avoidance_status_t, flag_nav_task_active) }, \
+         { "flag_nav_local_plan_valid", NULL, MAVLINK_TYPE_UINT8_T, 0, 6, offsetof(mavlink_avoidance_status_t, flag_nav_local_plan_valid) }, \
+         { "flag_laser_scan_data_valid", NULL, MAVLINK_TYPE_UINT8_T, 0, 7, offsetof(mavlink_avoidance_status_t, flag_laser_scan_data_valid) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_AVOIDANCE_STATUS { \
     "AVOIDANCE_STATUS", \
-    7, \
+    8, \
     {  { "flag_obstacle_in_far_front", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_avoidance_status_t, flag_obstacle_in_far_front) }, \
          { "flag_obstacle_far_nearby", NULL, MAVLINK_TYPE_UINT8_T, 0, 1, offsetof(mavlink_avoidance_status_t, flag_obstacle_far_nearby) }, \
          { "flag_obstacle_in_front", NULL, MAVLINK_TYPE_UINT8_T, 0, 2, offsetof(mavlink_avoidance_status_t, flag_obstacle_in_front) }, \
          { "flag_obstacle_in_rear", NULL, MAVLINK_TYPE_UINT8_T, 0, 3, offsetof(mavlink_avoidance_status_t, flag_obstacle_in_rear) }, \
          { "flag_obstacle_nearby", NULL, MAVLINK_TYPE_UINT8_T, 0, 4, offsetof(mavlink_avoidance_status_t, flag_obstacle_nearby) }, \
-         { "flag_nav_local_plan_valid", NULL, MAVLINK_TYPE_UINT8_T, 0, 5, offsetof(mavlink_avoidance_status_t, flag_nav_local_plan_valid) }, \
-         { "flag_laser_scan_data_valid", NULL, MAVLINK_TYPE_UINT8_T, 0, 6, offsetof(mavlink_avoidance_status_t, flag_laser_scan_data_valid) }, \
+         { "flag_nav_task_active", NULL, MAVLINK_TYPE_UINT8_T, 0, 5, offsetof(mavlink_avoidance_status_t, flag_nav_task_active) }, \
+         { "flag_nav_local_plan_valid", NULL, MAVLINK_TYPE_UINT8_T, 0, 6, offsetof(mavlink_avoidance_status_t, flag_nav_local_plan_valid) }, \
+         { "flag_laser_scan_data_valid", NULL, MAVLINK_TYPE_UINT8_T, 0, 7, offsetof(mavlink_avoidance_status_t, flag_laser_scan_data_valid) }, \
          } \
 }
 #endif
@@ -64,12 +67,13 @@ typedef struct __mavlink_avoidance_status_t {
  * @param flag_obstacle_in_front  Boolean indicating whether an obstacle is at the front of the vehicle
  * @param flag_obstacle_in_rear  Boolean indicating whether an obstacle is at the back of the vehicle
  * @param flag_obstacle_nearby  Boolean indicating whether an obstacle is within a distance from the vehicle
+ * @param flag_nav_task_active  Boolean indicating whether the navigation task is active onboard
  * @param flag_nav_local_plan_valid  Boolean indicating whether the local plan from navigation is valid for obstacle avoidance
  * @param flag_laser_scan_data_valid  Boolean indicating whether the laser scan data is valid for obstacle detection
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_avoidance_status_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t flag_obstacle_in_far_front, uint8_t flag_obstacle_far_nearby, uint8_t flag_obstacle_in_front, uint8_t flag_obstacle_in_rear, uint8_t flag_obstacle_nearby, uint8_t flag_nav_local_plan_valid, uint8_t flag_laser_scan_data_valid)
+                               uint8_t flag_obstacle_in_far_front, uint8_t flag_obstacle_far_nearby, uint8_t flag_obstacle_in_front, uint8_t flag_obstacle_in_rear, uint8_t flag_obstacle_nearby, uint8_t flag_nav_task_active, uint8_t flag_nav_local_plan_valid, uint8_t flag_laser_scan_data_valid)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN];
@@ -78,8 +82,9 @@ static inline uint16_t mavlink_msg_avoidance_status_pack(uint8_t system_id, uint
     _mav_put_uint8_t(buf, 2, flag_obstacle_in_front);
     _mav_put_uint8_t(buf, 3, flag_obstacle_in_rear);
     _mav_put_uint8_t(buf, 4, flag_obstacle_nearby);
-    _mav_put_uint8_t(buf, 5, flag_nav_local_plan_valid);
-    _mav_put_uint8_t(buf, 6, flag_laser_scan_data_valid);
+    _mav_put_uint8_t(buf, 5, flag_nav_task_active);
+    _mav_put_uint8_t(buf, 6, flag_nav_local_plan_valid);
+    _mav_put_uint8_t(buf, 7, flag_laser_scan_data_valid);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN);
 #else
@@ -89,6 +94,7 @@ static inline uint16_t mavlink_msg_avoidance_status_pack(uint8_t system_id, uint
     packet.flag_obstacle_in_front = flag_obstacle_in_front;
     packet.flag_obstacle_in_rear = flag_obstacle_in_rear;
     packet.flag_obstacle_nearby = flag_obstacle_nearby;
+    packet.flag_nav_task_active = flag_nav_task_active;
     packet.flag_nav_local_plan_valid = flag_nav_local_plan_valid;
     packet.flag_laser_scan_data_valid = flag_laser_scan_data_valid;
 
@@ -110,13 +116,14 @@ static inline uint16_t mavlink_msg_avoidance_status_pack(uint8_t system_id, uint
  * @param flag_obstacle_in_front  Boolean indicating whether an obstacle is at the front of the vehicle
  * @param flag_obstacle_in_rear  Boolean indicating whether an obstacle is at the back of the vehicle
  * @param flag_obstacle_nearby  Boolean indicating whether an obstacle is within a distance from the vehicle
+ * @param flag_nav_task_active  Boolean indicating whether the navigation task is active onboard
  * @param flag_nav_local_plan_valid  Boolean indicating whether the local plan from navigation is valid for obstacle avoidance
  * @param flag_laser_scan_data_valid  Boolean indicating whether the laser scan data is valid for obstacle detection
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_avoidance_status_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t flag_obstacle_in_far_front,uint8_t flag_obstacle_far_nearby,uint8_t flag_obstacle_in_front,uint8_t flag_obstacle_in_rear,uint8_t flag_obstacle_nearby,uint8_t flag_nav_local_plan_valid,uint8_t flag_laser_scan_data_valid)
+                                   uint8_t flag_obstacle_in_far_front,uint8_t flag_obstacle_far_nearby,uint8_t flag_obstacle_in_front,uint8_t flag_obstacle_in_rear,uint8_t flag_obstacle_nearby,uint8_t flag_nav_task_active,uint8_t flag_nav_local_plan_valid,uint8_t flag_laser_scan_data_valid)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN];
@@ -125,8 +132,9 @@ static inline uint16_t mavlink_msg_avoidance_status_pack_chan(uint8_t system_id,
     _mav_put_uint8_t(buf, 2, flag_obstacle_in_front);
     _mav_put_uint8_t(buf, 3, flag_obstacle_in_rear);
     _mav_put_uint8_t(buf, 4, flag_obstacle_nearby);
-    _mav_put_uint8_t(buf, 5, flag_nav_local_plan_valid);
-    _mav_put_uint8_t(buf, 6, flag_laser_scan_data_valid);
+    _mav_put_uint8_t(buf, 5, flag_nav_task_active);
+    _mav_put_uint8_t(buf, 6, flag_nav_local_plan_valid);
+    _mav_put_uint8_t(buf, 7, flag_laser_scan_data_valid);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN);
 #else
@@ -136,6 +144,7 @@ static inline uint16_t mavlink_msg_avoidance_status_pack_chan(uint8_t system_id,
     packet.flag_obstacle_in_front = flag_obstacle_in_front;
     packet.flag_obstacle_in_rear = flag_obstacle_in_rear;
     packet.flag_obstacle_nearby = flag_obstacle_nearby;
+    packet.flag_nav_task_active = flag_nav_task_active;
     packet.flag_nav_local_plan_valid = flag_nav_local_plan_valid;
     packet.flag_laser_scan_data_valid = flag_laser_scan_data_valid;
 
@@ -156,7 +165,7 @@ static inline uint16_t mavlink_msg_avoidance_status_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_avoidance_status_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_avoidance_status_t* avoidance_status)
 {
-    return mavlink_msg_avoidance_status_pack(system_id, component_id, msg, avoidance_status->flag_obstacle_in_far_front, avoidance_status->flag_obstacle_far_nearby, avoidance_status->flag_obstacle_in_front, avoidance_status->flag_obstacle_in_rear, avoidance_status->flag_obstacle_nearby, avoidance_status->flag_nav_local_plan_valid, avoidance_status->flag_laser_scan_data_valid);
+    return mavlink_msg_avoidance_status_pack(system_id, component_id, msg, avoidance_status->flag_obstacle_in_far_front, avoidance_status->flag_obstacle_far_nearby, avoidance_status->flag_obstacle_in_front, avoidance_status->flag_obstacle_in_rear, avoidance_status->flag_obstacle_nearby, avoidance_status->flag_nav_task_active, avoidance_status->flag_nav_local_plan_valid, avoidance_status->flag_laser_scan_data_valid);
 }
 
 /**
@@ -170,7 +179,7 @@ static inline uint16_t mavlink_msg_avoidance_status_encode(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_avoidance_status_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_avoidance_status_t* avoidance_status)
 {
-    return mavlink_msg_avoidance_status_pack_chan(system_id, component_id, chan, msg, avoidance_status->flag_obstacle_in_far_front, avoidance_status->flag_obstacle_far_nearby, avoidance_status->flag_obstacle_in_front, avoidance_status->flag_obstacle_in_rear, avoidance_status->flag_obstacle_nearby, avoidance_status->flag_nav_local_plan_valid, avoidance_status->flag_laser_scan_data_valid);
+    return mavlink_msg_avoidance_status_pack_chan(system_id, component_id, chan, msg, avoidance_status->flag_obstacle_in_far_front, avoidance_status->flag_obstacle_far_nearby, avoidance_status->flag_obstacle_in_front, avoidance_status->flag_obstacle_in_rear, avoidance_status->flag_obstacle_nearby, avoidance_status->flag_nav_task_active, avoidance_status->flag_nav_local_plan_valid, avoidance_status->flag_laser_scan_data_valid);
 }
 
 /**
@@ -182,12 +191,13 @@ static inline uint16_t mavlink_msg_avoidance_status_encode_chan(uint8_t system_i
  * @param flag_obstacle_in_front  Boolean indicating whether an obstacle is at the front of the vehicle
  * @param flag_obstacle_in_rear  Boolean indicating whether an obstacle is at the back of the vehicle
  * @param flag_obstacle_nearby  Boolean indicating whether an obstacle is within a distance from the vehicle
+ * @param flag_nav_task_active  Boolean indicating whether the navigation task is active onboard
  * @param flag_nav_local_plan_valid  Boolean indicating whether the local plan from navigation is valid for obstacle avoidance
  * @param flag_laser_scan_data_valid  Boolean indicating whether the laser scan data is valid for obstacle detection
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_avoidance_status_send(mavlink_channel_t chan, uint8_t flag_obstacle_in_far_front, uint8_t flag_obstacle_far_nearby, uint8_t flag_obstacle_in_front, uint8_t flag_obstacle_in_rear, uint8_t flag_obstacle_nearby, uint8_t flag_nav_local_plan_valid, uint8_t flag_laser_scan_data_valid)
+static inline void mavlink_msg_avoidance_status_send(mavlink_channel_t chan, uint8_t flag_obstacle_in_far_front, uint8_t flag_obstacle_far_nearby, uint8_t flag_obstacle_in_front, uint8_t flag_obstacle_in_rear, uint8_t flag_obstacle_nearby, uint8_t flag_nav_task_active, uint8_t flag_nav_local_plan_valid, uint8_t flag_laser_scan_data_valid)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN];
@@ -196,8 +206,9 @@ static inline void mavlink_msg_avoidance_status_send(mavlink_channel_t chan, uin
     _mav_put_uint8_t(buf, 2, flag_obstacle_in_front);
     _mav_put_uint8_t(buf, 3, flag_obstacle_in_rear);
     _mav_put_uint8_t(buf, 4, flag_obstacle_nearby);
-    _mav_put_uint8_t(buf, 5, flag_nav_local_plan_valid);
-    _mav_put_uint8_t(buf, 6, flag_laser_scan_data_valid);
+    _mav_put_uint8_t(buf, 5, flag_nav_task_active);
+    _mav_put_uint8_t(buf, 6, flag_nav_local_plan_valid);
+    _mav_put_uint8_t(buf, 7, flag_laser_scan_data_valid);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AVOIDANCE_STATUS, buf, MAVLINK_MSG_ID_AVOIDANCE_STATUS_MIN_LEN, MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN, MAVLINK_MSG_ID_AVOIDANCE_STATUS_CRC);
 #else
@@ -207,6 +218,7 @@ static inline void mavlink_msg_avoidance_status_send(mavlink_channel_t chan, uin
     packet.flag_obstacle_in_front = flag_obstacle_in_front;
     packet.flag_obstacle_in_rear = flag_obstacle_in_rear;
     packet.flag_obstacle_nearby = flag_obstacle_nearby;
+    packet.flag_nav_task_active = flag_nav_task_active;
     packet.flag_nav_local_plan_valid = flag_nav_local_plan_valid;
     packet.flag_laser_scan_data_valid = flag_laser_scan_data_valid;
 
@@ -222,7 +234,7 @@ static inline void mavlink_msg_avoidance_status_send(mavlink_channel_t chan, uin
 static inline void mavlink_msg_avoidance_status_send_struct(mavlink_channel_t chan, const mavlink_avoidance_status_t* avoidance_status)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_avoidance_status_send(chan, avoidance_status->flag_obstacle_in_far_front, avoidance_status->flag_obstacle_far_nearby, avoidance_status->flag_obstacle_in_front, avoidance_status->flag_obstacle_in_rear, avoidance_status->flag_obstacle_nearby, avoidance_status->flag_nav_local_plan_valid, avoidance_status->flag_laser_scan_data_valid);
+    mavlink_msg_avoidance_status_send(chan, avoidance_status->flag_obstacle_in_far_front, avoidance_status->flag_obstacle_far_nearby, avoidance_status->flag_obstacle_in_front, avoidance_status->flag_obstacle_in_rear, avoidance_status->flag_obstacle_nearby, avoidance_status->flag_nav_task_active, avoidance_status->flag_nav_local_plan_valid, avoidance_status->flag_laser_scan_data_valid);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AVOIDANCE_STATUS, (const char *)avoidance_status, MAVLINK_MSG_ID_AVOIDANCE_STATUS_MIN_LEN, MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN, MAVLINK_MSG_ID_AVOIDANCE_STATUS_CRC);
 #endif
@@ -236,7 +248,7 @@ static inline void mavlink_msg_avoidance_status_send_struct(mavlink_channel_t ch
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_avoidance_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t flag_obstacle_in_far_front, uint8_t flag_obstacle_far_nearby, uint8_t flag_obstacle_in_front, uint8_t flag_obstacle_in_rear, uint8_t flag_obstacle_nearby, uint8_t flag_nav_local_plan_valid, uint8_t flag_laser_scan_data_valid)
+static inline void mavlink_msg_avoidance_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t flag_obstacle_in_far_front, uint8_t flag_obstacle_far_nearby, uint8_t flag_obstacle_in_front, uint8_t flag_obstacle_in_rear, uint8_t flag_obstacle_nearby, uint8_t flag_nav_task_active, uint8_t flag_nav_local_plan_valid, uint8_t flag_laser_scan_data_valid)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -245,8 +257,9 @@ static inline void mavlink_msg_avoidance_status_send_buf(mavlink_message_t *msgb
     _mav_put_uint8_t(buf, 2, flag_obstacle_in_front);
     _mav_put_uint8_t(buf, 3, flag_obstacle_in_rear);
     _mav_put_uint8_t(buf, 4, flag_obstacle_nearby);
-    _mav_put_uint8_t(buf, 5, flag_nav_local_plan_valid);
-    _mav_put_uint8_t(buf, 6, flag_laser_scan_data_valid);
+    _mav_put_uint8_t(buf, 5, flag_nav_task_active);
+    _mav_put_uint8_t(buf, 6, flag_nav_local_plan_valid);
+    _mav_put_uint8_t(buf, 7, flag_laser_scan_data_valid);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AVOIDANCE_STATUS, buf, MAVLINK_MSG_ID_AVOIDANCE_STATUS_MIN_LEN, MAVLINK_MSG_ID_AVOIDANCE_STATUS_LEN, MAVLINK_MSG_ID_AVOIDANCE_STATUS_CRC);
 #else
@@ -256,6 +269,7 @@ static inline void mavlink_msg_avoidance_status_send_buf(mavlink_message_t *msgb
     packet->flag_obstacle_in_front = flag_obstacle_in_front;
     packet->flag_obstacle_in_rear = flag_obstacle_in_rear;
     packet->flag_obstacle_nearby = flag_obstacle_nearby;
+    packet->flag_nav_task_active = flag_nav_task_active;
     packet->flag_nav_local_plan_valid = flag_nav_local_plan_valid;
     packet->flag_laser_scan_data_valid = flag_laser_scan_data_valid;
 
@@ -320,13 +334,23 @@ static inline uint8_t mavlink_msg_avoidance_status_get_flag_obstacle_nearby(cons
 }
 
 /**
+ * @brief Get field flag_nav_task_active from avoidance_status message
+ *
+ * @return  Boolean indicating whether the navigation task is active onboard
+ */
+static inline uint8_t mavlink_msg_avoidance_status_get_flag_nav_task_active(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  5);
+}
+
+/**
  * @brief Get field flag_nav_local_plan_valid from avoidance_status message
  *
  * @return  Boolean indicating whether the local plan from navigation is valid for obstacle avoidance
  */
 static inline uint8_t mavlink_msg_avoidance_status_get_flag_nav_local_plan_valid(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  5);
+    return _MAV_RETURN_uint8_t(msg,  6);
 }
 
 /**
@@ -336,7 +360,7 @@ static inline uint8_t mavlink_msg_avoidance_status_get_flag_nav_local_plan_valid
  */
 static inline uint8_t mavlink_msg_avoidance_status_get_flag_laser_scan_data_valid(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  6);
+    return _MAV_RETURN_uint8_t(msg,  7);
 }
 
 /**
@@ -353,6 +377,7 @@ static inline void mavlink_msg_avoidance_status_decode(const mavlink_message_t* 
     avoidance_status->flag_obstacle_in_front = mavlink_msg_avoidance_status_get_flag_obstacle_in_front(msg);
     avoidance_status->flag_obstacle_in_rear = mavlink_msg_avoidance_status_get_flag_obstacle_in_rear(msg);
     avoidance_status->flag_obstacle_nearby = mavlink_msg_avoidance_status_get_flag_obstacle_nearby(msg);
+    avoidance_status->flag_nav_task_active = mavlink_msg_avoidance_status_get_flag_nav_task_active(msg);
     avoidance_status->flag_nav_local_plan_valid = mavlink_msg_avoidance_status_get_flag_nav_local_plan_valid(msg);
     avoidance_status->flag_laser_scan_data_valid = mavlink_msg_avoidance_status_get_flag_laser_scan_data_valid(msg);
 #else

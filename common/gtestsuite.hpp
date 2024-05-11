@@ -16926,8 +16926,9 @@ TEST(common, AVOIDANCE_STATUS)
     packet_in.flag_obstacle_in_front = 139;
     packet_in.flag_obstacle_in_rear = 206;
     packet_in.flag_obstacle_nearby = 17;
-    packet_in.flag_nav_local_plan_valid = 84;
-    packet_in.flag_laser_scan_data_valid = 151;
+    packet_in.flag_nav_task_active = 84;
+    packet_in.flag_nav_local_plan_valid = 151;
+    packet_in.flag_laser_scan_data_valid = 218;
 
     mavlink::common::msg::AVOIDANCE_STATUS packet1{};
     mavlink::common::msg::AVOIDANCE_STATUS packet2{};
@@ -16947,6 +16948,7 @@ TEST(common, AVOIDANCE_STATUS)
     EXPECT_EQ(packet1.flag_obstacle_in_front, packet2.flag_obstacle_in_front);
     EXPECT_EQ(packet1.flag_obstacle_in_rear, packet2.flag_obstacle_in_rear);
     EXPECT_EQ(packet1.flag_obstacle_nearby, packet2.flag_obstacle_nearby);
+    EXPECT_EQ(packet1.flag_nav_task_active, packet2.flag_nav_task_active);
     EXPECT_EQ(packet1.flag_nav_local_plan_valid, packet2.flag_nav_local_plan_valid);
     EXPECT_EQ(packet1.flag_laser_scan_data_valid, packet2.flag_laser_scan_data_valid);
 }
@@ -16960,7 +16962,7 @@ TEST(common_interop, AVOIDANCE_STATUS)
     memset(&msg, 0, sizeof(msg));
 
     mavlink_avoidance_status_t packet_c {
-         5, 72, 139, 206, 17, 84, 151
+         5, 72, 139, 206, 17, 84, 151, 218
     };
 
     mavlink::common::msg::AVOIDANCE_STATUS packet_in{};
@@ -16969,8 +16971,9 @@ TEST(common_interop, AVOIDANCE_STATUS)
     packet_in.flag_obstacle_in_front = 139;
     packet_in.flag_obstacle_in_rear = 206;
     packet_in.flag_obstacle_nearby = 17;
-    packet_in.flag_nav_local_plan_valid = 84;
-    packet_in.flag_laser_scan_data_valid = 151;
+    packet_in.flag_nav_task_active = 84;
+    packet_in.flag_nav_local_plan_valid = 151;
+    packet_in.flag_laser_scan_data_valid = 218;
 
     mavlink::common::msg::AVOIDANCE_STATUS packet2{};
 
@@ -16988,6 +16991,7 @@ TEST(common_interop, AVOIDANCE_STATUS)
     EXPECT_EQ(packet_in.flag_obstacle_in_front, packet2.flag_obstacle_in_front);
     EXPECT_EQ(packet_in.flag_obstacle_in_rear, packet2.flag_obstacle_in_rear);
     EXPECT_EQ(packet_in.flag_obstacle_nearby, packet2.flag_obstacle_nearby);
+    EXPECT_EQ(packet_in.flag_nav_task_active, packet2.flag_nav_task_active);
     EXPECT_EQ(packet_in.flag_nav_local_plan_valid, packet2.flag_nav_local_plan_valid);
     EXPECT_EQ(packet_in.flag_laser_scan_data_valid, packet2.flag_laser_scan_data_valid);
 

@@ -17001,6 +17001,101 @@ TEST(common_interop, AVOIDANCE_STATUS)
 }
 #endif
 
+TEST(common, VCU_BASE_STATUS)
+{
+    mavlink::mavlink_message_t msg;
+    mavlink::MsgMap map1(msg);
+    mavlink::MsgMap map2(msg);
+
+    mavlink::common::msg::VCU_BASE_STATUS packet_in{};
+    packet_in.vcu_base_type = 77;
+    packet_in.gear_position = 144;
+    packet_in.speed = 17.0;
+    packet_in.steering_angle_valid = 211;
+    packet_in.steering_angle = 45.0;
+    packet_in.twist_valid = 22;
+    packet_in.vel = {{ 73.0, 74.0, 75.0 }};
+    packet_in.heading_rate_valid = 89;
+    packet_in.heading_rate = 157.0;
+    packet_in.operating_mode = 156;
+
+    mavlink::common::msg::VCU_BASE_STATUS packet1{};
+    mavlink::common::msg::VCU_BASE_STATUS packet2{};
+
+    packet1 = packet_in;
+
+    //std::cout << packet1.to_yaml() << std::endl;
+
+    packet1.serialize(map1);
+
+    mavlink::mavlink_finalize_message(&msg, 1, 1, packet1.MIN_LENGTH, packet1.LENGTH, packet1.CRC_EXTRA);
+
+    packet2.deserialize(map2);
+
+    EXPECT_EQ(packet1.vcu_base_type, packet2.vcu_base_type);
+    EXPECT_EQ(packet1.gear_position, packet2.gear_position);
+    EXPECT_EQ(packet1.speed, packet2.speed);
+    EXPECT_EQ(packet1.steering_angle_valid, packet2.steering_angle_valid);
+    EXPECT_EQ(packet1.steering_angle, packet2.steering_angle);
+    EXPECT_EQ(packet1.twist_valid, packet2.twist_valid);
+    EXPECT_EQ(packet1.vel, packet2.vel);
+    EXPECT_EQ(packet1.heading_rate_valid, packet2.heading_rate_valid);
+    EXPECT_EQ(packet1.heading_rate, packet2.heading_rate);
+    EXPECT_EQ(packet1.operating_mode, packet2.operating_mode);
+}
+
+#ifdef TEST_INTEROP
+TEST(common_interop, VCU_BASE_STATUS)
+{
+    mavlink_message_t msg;
+
+    // to get nice print
+    memset(&msg, 0, sizeof(msg));
+
+    mavlink_vcu_base_status_t packet_c {
+         17.0, 45.0, { 73.0, 74.0, 75.0 }, 157.0, 77, 144, 211, 22, 89, 156
+    };
+
+    mavlink::common::msg::VCU_BASE_STATUS packet_in{};
+    packet_in.vcu_base_type = 77;
+    packet_in.gear_position = 144;
+    packet_in.speed = 17.0;
+    packet_in.steering_angle_valid = 211;
+    packet_in.steering_angle = 45.0;
+    packet_in.twist_valid = 22;
+    packet_in.vel = {{ 73.0, 74.0, 75.0 }};
+    packet_in.heading_rate_valid = 89;
+    packet_in.heading_rate = 157.0;
+    packet_in.operating_mode = 156;
+
+    mavlink::common::msg::VCU_BASE_STATUS packet2{};
+
+    mavlink_msg_vcu_base_status_encode(1, 1, &msg, &packet_c);
+
+    // simulate message-handling callback
+    [&packet2](const mavlink_message_t *cmsg) {
+        MsgMap map2(cmsg);
+
+        packet2.deserialize(map2);
+    } (&msg);
+
+    EXPECT_EQ(packet_in.vcu_base_type, packet2.vcu_base_type);
+    EXPECT_EQ(packet_in.gear_position, packet2.gear_position);
+    EXPECT_EQ(packet_in.speed, packet2.speed);
+    EXPECT_EQ(packet_in.steering_angle_valid, packet2.steering_angle_valid);
+    EXPECT_EQ(packet_in.steering_angle, packet2.steering_angle);
+    EXPECT_EQ(packet_in.twist_valid, packet2.twist_valid);
+    EXPECT_EQ(packet_in.vel, packet2.vel);
+    EXPECT_EQ(packet_in.heading_rate_valid, packet2.heading_rate_valid);
+    EXPECT_EQ(packet_in.heading_rate, packet2.heading_rate);
+    EXPECT_EQ(packet_in.operating_mode, packet2.operating_mode);
+
+#ifdef PRINT_MSG
+    PRINT_MSG(msg);
+#endif
+}
+#endif
+
 TEST(common, VCU_COMMAND_VELOCITY)
 {
     mavlink::mavlink_message_t msg;

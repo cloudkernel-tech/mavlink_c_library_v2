@@ -12,7 +12,7 @@ namespace msg {
  * VCU command velocity from/to the pursuit autopilot
  */
 struct VCU_COMMAND_VELOCITY : mavlink::Message {
-    static constexpr msgid_t MSG_ID = 342;
+    static constexpr msgid_t MSG_ID = 343;
     static constexpr size_t LENGTH = 24;
     static constexpr size_t MIN_LENGTH = 24;
     static constexpr uint8_t CRC_EXTRA = 107;

@@ -11886,6 +11886,69 @@ static void mavlink_test_avoidance_status(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
 
+static void mavlink_test_vcu_base_status(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_VCU_BASE_STATUS >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_vcu_base_status_t packet_in = {
+        17.0,45.0,{ 73.0, 74.0, 75.0 },157.0,77,144,211,22,89,156
+    };
+    mavlink_vcu_base_status_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.speed = packet_in.speed;
+        packet1.steering_angle = packet_in.steering_angle;
+        packet1.heading_rate = packet_in.heading_rate;
+        packet1.vcu_base_type = packet_in.vcu_base_type;
+        packet1.gear_position = packet_in.gear_position;
+        packet1.steering_angle_valid = packet_in.steering_angle_valid;
+        packet1.twist_valid = packet_in.twist_valid;
+        packet1.heading_rate_valid = packet_in.heading_rate_valid;
+        packet1.operating_mode = packet_in.operating_mode;
+        
+        mav_array_memcpy(packet1.vel, packet_in.vel, sizeof(float)*3);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_VCU_BASE_STATUS_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_VCU_BASE_STATUS_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vcu_base_status_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_vcu_base_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vcu_base_status_pack(system_id, component_id, &msg , packet1.vcu_base_type , packet1.gear_position , packet1.speed , packet1.steering_angle_valid , packet1.steering_angle , packet1.twist_valid , packet1.vel , packet1.heading_rate_valid , packet1.heading_rate , packet1.operating_mode );
+    mavlink_msg_vcu_base_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vcu_base_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.vcu_base_type , packet1.gear_position , packet1.speed , packet1.steering_angle_valid , packet1.steering_angle , packet1.twist_valid , packet1.vel , packet1.heading_rate_valid , packet1.heading_rate , packet1.operating_mode );
+    mavlink_msg_vcu_base_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_vcu_base_status_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vcu_base_status_send(MAVLINK_COMM_1 , packet1.vcu_base_type , packet1.gear_position , packet1.speed , packet1.steering_angle_valid , packet1.steering_angle , packet1.twist_valid , packet1.vel , packet1.heading_rate_valid , packet1.heading_rate , packet1.operating_mode );
+    mavlink_msg_vcu_base_status_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
 static void mavlink_test_vcu_command_velocity(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -13349,6 +13412,7 @@ static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_raw_rpm(system_id, component_id, last_msg);
     mavlink_test_utm_global_position(system_id, component_id, last_msg);
     mavlink_test_avoidance_status(system_id, component_id, last_msg);
+    mavlink_test_vcu_base_status(system_id, component_id, last_msg);
     mavlink_test_vcu_command_velocity(system_id, component_id, last_msg);
     mavlink_test_debug_float_array(system_id, component_id, last_msg);
     mavlink_test_orbit_execution_status(system_id, component_id, last_msg);

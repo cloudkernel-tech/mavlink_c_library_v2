@@ -17159,6 +17159,73 @@ TEST(common_interop, VCU_COMMAND_VELOCITY)
 }
 #endif
 
+TEST(common, VCU_BMS_STATUS)
+{
+    mavlink::mavlink_message_t msg;
+    mavlink::MsgMap map1(msg);
+    mavlink::MsgMap map2(msg);
+
+    mavlink::common::msg::VCU_BMS_STATUS packet_in{};
+    packet_in.voltage = 17.0;
+    packet_in.current = 45.0;
+    packet_in.remained_capacity = 73.0;
+
+    mavlink::common::msg::VCU_BMS_STATUS packet1{};
+    mavlink::common::msg::VCU_BMS_STATUS packet2{};
+
+    packet1 = packet_in;
+
+    //std::cout << packet1.to_yaml() << std::endl;
+
+    packet1.serialize(map1);
+
+    mavlink::mavlink_finalize_message(&msg, 1, 1, packet1.MIN_LENGTH, packet1.LENGTH, packet1.CRC_EXTRA);
+
+    packet2.deserialize(map2);
+
+    EXPECT_EQ(packet1.voltage, packet2.voltage);
+    EXPECT_EQ(packet1.current, packet2.current);
+    EXPECT_EQ(packet1.remained_capacity, packet2.remained_capacity);
+}
+
+#ifdef TEST_INTEROP
+TEST(common_interop, VCU_BMS_STATUS)
+{
+    mavlink_message_t msg;
+
+    // to get nice print
+    memset(&msg, 0, sizeof(msg));
+
+    mavlink_vcu_bms_status_t packet_c {
+         17.0, 45.0, 73.0
+    };
+
+    mavlink::common::msg::VCU_BMS_STATUS packet_in{};
+    packet_in.voltage = 17.0;
+    packet_in.current = 45.0;
+    packet_in.remained_capacity = 73.0;
+
+    mavlink::common::msg::VCU_BMS_STATUS packet2{};
+
+    mavlink_msg_vcu_bms_status_encode(1, 1, &msg, &packet_c);
+
+    // simulate message-handling callback
+    [&packet2](const mavlink_message_t *cmsg) {
+        MsgMap map2(cmsg);
+
+        packet2.deserialize(map2);
+    } (&msg);
+
+    EXPECT_EQ(packet_in.voltage, packet2.voltage);
+    EXPECT_EQ(packet_in.current, packet2.current);
+    EXPECT_EQ(packet_in.remained_capacity, packet2.remained_capacity);
+
+#ifdef PRINT_MSG
+    PRINT_MSG(msg);
+#endif
+}
+#endif
+
 TEST(common, DEBUG_FLOAT_ARRAY)
 {
     mavlink::mavlink_message_t msg;

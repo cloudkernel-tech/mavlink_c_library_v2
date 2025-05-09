@@ -17169,6 +17169,9 @@ TEST(common, VCU_BMS_STATUS)
     packet_in.voltage = 17.0;
     packet_in.current = 45.0;
     packet_in.remained_capacity = 73.0;
+    packet_in.remained_percentage = 101.0;
+    packet_in.max_temperature = 129.0;
+    packet_in.min_temperature = 157.0;
 
     mavlink::common::msg::VCU_BMS_STATUS packet1{};
     mavlink::common::msg::VCU_BMS_STATUS packet2{};
@@ -17186,6 +17189,9 @@ TEST(common, VCU_BMS_STATUS)
     EXPECT_EQ(packet1.voltage, packet2.voltage);
     EXPECT_EQ(packet1.current, packet2.current);
     EXPECT_EQ(packet1.remained_capacity, packet2.remained_capacity);
+    EXPECT_EQ(packet1.remained_percentage, packet2.remained_percentage);
+    EXPECT_EQ(packet1.max_temperature, packet2.max_temperature);
+    EXPECT_EQ(packet1.min_temperature, packet2.min_temperature);
 }
 
 #ifdef TEST_INTEROP
@@ -17197,13 +17203,16 @@ TEST(common_interop, VCU_BMS_STATUS)
     memset(&msg, 0, sizeof(msg));
 
     mavlink_vcu_bms_status_t packet_c {
-         17.0, 45.0, 73.0
+         17.0, 45.0, 73.0, 101.0, 129.0, 157.0
     };
 
     mavlink::common::msg::VCU_BMS_STATUS packet_in{};
     packet_in.voltage = 17.0;
     packet_in.current = 45.0;
     packet_in.remained_capacity = 73.0;
+    packet_in.remained_percentage = 101.0;
+    packet_in.max_temperature = 129.0;
+    packet_in.min_temperature = 157.0;
 
     mavlink::common::msg::VCU_BMS_STATUS packet2{};
 
@@ -17219,6 +17228,9 @@ TEST(common_interop, VCU_BMS_STATUS)
     EXPECT_EQ(packet_in.voltage, packet2.voltage);
     EXPECT_EQ(packet_in.current, packet2.current);
     EXPECT_EQ(packet_in.remained_capacity, packet2.remained_capacity);
+    EXPECT_EQ(packet_in.remained_percentage, packet2.remained_percentage);
+    EXPECT_EQ(packet_in.max_temperature, packet2.max_temperature);
+    EXPECT_EQ(packet_in.min_temperature, packet2.min_temperature);
 
 #ifdef PRINT_MSG
     PRINT_MSG(msg);

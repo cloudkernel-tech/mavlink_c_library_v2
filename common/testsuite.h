@@ -12016,13 +12016,16 @@ static void mavlink_test_vcu_bms_status(uint8_t system_id, uint8_t component_id,
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_vcu_bms_status_t packet_in = {
-        17.0,45.0,73.0
+        17.0,45.0,73.0,101.0,129.0,157.0
     };
     mavlink_vcu_bms_status_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.voltage = packet_in.voltage;
         packet1.current = packet_in.current;
         packet1.remained_capacity = packet_in.remained_capacity;
+        packet1.remained_percentage = packet_in.remained_percentage;
+        packet1.max_temperature = packet_in.max_temperature;
+        packet1.min_temperature = packet_in.min_temperature;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -12037,12 +12040,12 @@ static void mavlink_test_vcu_bms_status(uint8_t system_id, uint8_t component_id,
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_vcu_bms_status_pack(system_id, component_id, &msg , packet1.voltage , packet1.current , packet1.remained_capacity );
+    mavlink_msg_vcu_bms_status_pack(system_id, component_id, &msg , packet1.voltage , packet1.current , packet1.remained_capacity , packet1.remained_percentage , packet1.max_temperature , packet1.min_temperature );
     mavlink_msg_vcu_bms_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_vcu_bms_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.voltage , packet1.current , packet1.remained_capacity );
+    mavlink_msg_vcu_bms_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.voltage , packet1.current , packet1.remained_capacity , packet1.remained_percentage , packet1.max_temperature , packet1.min_temperature );
     mavlink_msg_vcu_bms_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -12055,7 +12058,7 @@ static void mavlink_test_vcu_bms_status(uint8_t system_id, uint8_t component_id,
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_vcu_bms_status_send(MAVLINK_COMM_1 , packet1.voltage , packet1.current , packet1.remained_capacity );
+    mavlink_msg_vcu_bms_status_send(MAVLINK_COMM_1 , packet1.voltage , packet1.current , packet1.remained_capacity , packet1.remained_percentage , packet1.max_temperature , packet1.min_temperature );
     mavlink_msg_vcu_bms_status_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

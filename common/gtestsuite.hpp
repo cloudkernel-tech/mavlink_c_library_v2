@@ -17238,6 +17238,69 @@ TEST(common_interop, VCU_BMS_STATUS)
 }
 #endif
 
+TEST(common, VCU_DIRECT_CAN_CTRL)
+{
+    mavlink::mavlink_message_t msg;
+    mavlink::MsgMap map1(msg);
+    mavlink::MsgMap map2(msg);
+
+    mavlink::common::msg::VCU_DIRECT_CAN_CTRL packet_in{};
+    packet_in.msg_id = 963497464;
+    packet_in.msg_body = {{ 17, 18, 19, 20, 21, 22, 23, 24 }};
+
+    mavlink::common::msg::VCU_DIRECT_CAN_CTRL packet1{};
+    mavlink::common::msg::VCU_DIRECT_CAN_CTRL packet2{};
+
+    packet1 = packet_in;
+
+    //std::cout << packet1.to_yaml() << std::endl;
+
+    packet1.serialize(map1);
+
+    mavlink::mavlink_finalize_message(&msg, 1, 1, packet1.MIN_LENGTH, packet1.LENGTH, packet1.CRC_EXTRA);
+
+    packet2.deserialize(map2);
+
+    EXPECT_EQ(packet1.msg_id, packet2.msg_id);
+    EXPECT_EQ(packet1.msg_body, packet2.msg_body);
+}
+
+#ifdef TEST_INTEROP
+TEST(common_interop, VCU_DIRECT_CAN_CTRL)
+{
+    mavlink_message_t msg;
+
+    // to get nice print
+    memset(&msg, 0, sizeof(msg));
+
+    mavlink_vcu_direct_can_ctrl_t packet_c {
+         963497464, { 17, 18, 19, 20, 21, 22, 23, 24 }
+    };
+
+    mavlink::common::msg::VCU_DIRECT_CAN_CTRL packet_in{};
+    packet_in.msg_id = 963497464;
+    packet_in.msg_body = {{ 17, 18, 19, 20, 21, 22, 23, 24 }};
+
+    mavlink::common::msg::VCU_DIRECT_CAN_CTRL packet2{};
+
+    mavlink_msg_vcu_direct_can_ctrl_encode(1, 1, &msg, &packet_c);
+
+    // simulate message-handling callback
+    [&packet2](const mavlink_message_t *cmsg) {
+        MsgMap map2(cmsg);
+
+        packet2.deserialize(map2);
+    } (&msg);
+
+    EXPECT_EQ(packet_in.msg_id, packet2.msg_id);
+    EXPECT_EQ(packet_in.msg_body, packet2.msg_body);
+
+#ifdef PRINT_MSG
+    PRINT_MSG(msg);
+#endif
+}
+#endif
+
 TEST(common, DEBUG_FLOAT_ARRAY)
 {
     mavlink::mavlink_message_t msg;

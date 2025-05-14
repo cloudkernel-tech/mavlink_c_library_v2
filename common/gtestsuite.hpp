@@ -17105,6 +17105,7 @@ TEST(common, VCU_COMMAND_VELOCITY)
     mavlink::common::msg::VCU_COMMAND_VELOCITY packet_in{};
     packet_in.linear_vel = {{ 17.0, 18.0, 19.0 }};
     packet_in.angular_vel = {{ 101.0, 102.0, 103.0 }};
+    packet_in.flag_nav_src = 77;
 
     mavlink::common::msg::VCU_COMMAND_VELOCITY packet1{};
     mavlink::common::msg::VCU_COMMAND_VELOCITY packet2{};
@@ -17121,6 +17122,7 @@ TEST(common, VCU_COMMAND_VELOCITY)
 
     EXPECT_EQ(packet1.linear_vel, packet2.linear_vel);
     EXPECT_EQ(packet1.angular_vel, packet2.angular_vel);
+    EXPECT_EQ(packet1.flag_nav_src, packet2.flag_nav_src);
 }
 
 #ifdef TEST_INTEROP
@@ -17132,12 +17134,13 @@ TEST(common_interop, VCU_COMMAND_VELOCITY)
     memset(&msg, 0, sizeof(msg));
 
     mavlink_vcu_command_velocity_t packet_c {
-         { 17.0, 18.0, 19.0 }, { 101.0, 102.0, 103.0 }
+         { 17.0, 18.0, 19.0 }, { 101.0, 102.0, 103.0 }, 77
     };
 
     mavlink::common::msg::VCU_COMMAND_VELOCITY packet_in{};
     packet_in.linear_vel = {{ 17.0, 18.0, 19.0 }};
     packet_in.angular_vel = {{ 101.0, 102.0, 103.0 }};
+    packet_in.flag_nav_src = 77;
 
     mavlink::common::msg::VCU_COMMAND_VELOCITY packet2{};
 
@@ -17152,6 +17155,7 @@ TEST(common_interop, VCU_COMMAND_VELOCITY)
 
     EXPECT_EQ(packet_in.linear_vel, packet2.linear_vel);
     EXPECT_EQ(packet_in.angular_vel, packet2.angular_vel);
+    EXPECT_EQ(packet_in.flag_nav_src, packet2.flag_nav_src);
 
 #ifdef PRINT_MSG
     PRINT_MSG(msg);

@@ -11961,10 +11961,11 @@ static void mavlink_test_vcu_command_velocity(uint8_t system_id, uint8_t compone
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_vcu_command_velocity_t packet_in = {
-        { 17.0, 18.0, 19.0 },{ 101.0, 102.0, 103.0 }
+        { 17.0, 18.0, 19.0 },{ 101.0, 102.0, 103.0 },77
     };
     mavlink_vcu_command_velocity_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
+        packet1.flag_nav_src = packet_in.flag_nav_src;
         
         mav_array_memcpy(packet1.linear_vel, packet_in.linear_vel, sizeof(float)*3);
         mav_array_memcpy(packet1.angular_vel, packet_in.angular_vel, sizeof(float)*3);
@@ -11981,12 +11982,12 @@ static void mavlink_test_vcu_command_velocity(uint8_t system_id, uint8_t compone
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_vcu_command_velocity_pack(system_id, component_id, &msg , packet1.linear_vel , packet1.angular_vel );
+    mavlink_msg_vcu_command_velocity_pack(system_id, component_id, &msg , packet1.linear_vel , packet1.angular_vel , packet1.flag_nav_src );
     mavlink_msg_vcu_command_velocity_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_vcu_command_velocity_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.linear_vel , packet1.angular_vel );
+    mavlink_msg_vcu_command_velocity_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.linear_vel , packet1.angular_vel , packet1.flag_nav_src );
     mavlink_msg_vcu_command_velocity_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -11999,7 +12000,7 @@ static void mavlink_test_vcu_command_velocity(uint8_t system_id, uint8_t compone
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_vcu_command_velocity_send(MAVLINK_COMM_1 , packet1.linear_vel , packet1.angular_vel );
+    mavlink_msg_vcu_command_velocity_send(MAVLINK_COMM_1 , packet1.linear_vel , packet1.angular_vel , packet1.flag_nav_src );
     mavlink_msg_vcu_command_velocity_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

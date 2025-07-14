@@ -13,9 +13,9 @@ namespace msg {
  */
 struct GPS_INPUT : mavlink::Message {
     static constexpr msgid_t MSG_ID = 232;
-    static constexpr size_t LENGTH = 65;
-    static constexpr size_t MIN_LENGTH = 63;
-    static constexpr uint8_t CRC_EXTRA = 151;
+    static constexpr size_t LENGTH = 73;
+    static constexpr size_t MIN_LENGTH = 71;
+    static constexpr uint8_t CRC_EXTRA = 44;
     static constexpr auto NAME = "GPS_INPUT";
 
 
@@ -24,12 +24,14 @@ struct GPS_INPUT : mavlink::Message {
     uint16_t ignore_flags; /*<  Bitmap indicating which GPS input flags fields to ignore.  All other fields must be provided. */
     uint32_t time_week_ms; /*< [ms] GPS time (from start of GPS week) */
     uint16_t time_week; /*<  GPS week number */
-    uint8_t fix_type; /*<  0-1: no fix, 2: 2D fix, 3: 3D fix. 4: 3D with DGPS. 5: 3D with RTK */
+    uint8_t fix_type; /*<  0-1: no fix, 2: 2D fix, 3: 3D fix. 4: 3D with DGPS. 5: 3D fix with RTK. 6: 3D float with RTK */
     int32_t lat; /*< [degE7] Latitude (WGS84) */
     int32_t lon; /*< [degE7] Longitude (WGS84) */
     float alt; /*< [m] Altitude (MSL). Positive for up. */
     float hdop; /*< [m] GPS HDOP horizontal dilution of position */
     float vdop; /*< [m] GPS VDOP vertical dilution of position */
+    float eph; /*< [m] GPS HDOP horizontal dilution of position */
+    float epv; /*< [m] GPS VDOP vertical dilution of position */
     float vn; /*< [m/s] GPS velocity in north direction in earth-fixed NED frame */
     float ve; /*< [m/s] GPS velocity in east direction in earth-fixed NED frame */
     float vd; /*< [m/s] GPS velocity in down direction in earth-fixed NED frame */
@@ -66,6 +68,8 @@ struct GPS_INPUT : mavlink::Message {
         ss << "  alt: " << alt << std::endl;
         ss << "  hdop: " << hdop << std::endl;
         ss << "  vdop: " << vdop << std::endl;
+        ss << "  eph: " << eph << std::endl;
+        ss << "  epv: " << epv << std::endl;
         ss << "  vn: " << vn << std::endl;
         ss << "  ve: " << ve << std::endl;
         ss << "  vd: " << vd << std::endl;
@@ -89,18 +93,20 @@ struct GPS_INPUT : mavlink::Message {
         map << alt;                           // offset: 20
         map << hdop;                          // offset: 24
         map << vdop;                          // offset: 28
-        map << vn;                            // offset: 32
-        map << ve;                            // offset: 36
-        map << vd;                            // offset: 40
-        map << speed_accuracy;                // offset: 44
-        map << horiz_accuracy;                // offset: 48
-        map << vert_accuracy;                 // offset: 52
-        map << ignore_flags;                  // offset: 56
-        map << time_week;                     // offset: 58
-        map << gps_id;                        // offset: 60
-        map << fix_type;                      // offset: 61
-        map << satellites_visible;            // offset: 62
-        map << yaw;                           // offset: 63
+        map << eph;                           // offset: 32
+        map << epv;                           // offset: 36
+        map << vn;                            // offset: 40
+        map << ve;                            // offset: 44
+        map << vd;                            // offset: 48
+        map << speed_accuracy;                // offset: 52
+        map << horiz_accuracy;                // offset: 56
+        map << vert_accuracy;                 // offset: 60
+        map << ignore_flags;                  // offset: 64
+        map << time_week;                     // offset: 66
+        map << gps_id;                        // offset: 68
+        map << fix_type;                      // offset: 69
+        map << satellites_visible;            // offset: 70
+        map << yaw;                           // offset: 71
     }
 
     inline void deserialize(mavlink::MsgMap &map) override
@@ -112,18 +118,20 @@ struct GPS_INPUT : mavlink::Message {
         map >> alt;                           // offset: 20
         map >> hdop;                          // offset: 24
         map >> vdop;                          // offset: 28
-        map >> vn;                            // offset: 32
-        map >> ve;                            // offset: 36
-        map >> vd;                            // offset: 40
-        map >> speed_accuracy;                // offset: 44
-        map >> horiz_accuracy;                // offset: 48
-        map >> vert_accuracy;                 // offset: 52
-        map >> ignore_flags;                  // offset: 56
-        map >> time_week;                     // offset: 58
-        map >> gps_id;                        // offset: 60
-        map >> fix_type;                      // offset: 61
-        map >> satellites_visible;            // offset: 62
-        map >> yaw;                           // offset: 63
+        map >> eph;                           // offset: 32
+        map >> epv;                           // offset: 36
+        map >> vn;                            // offset: 40
+        map >> ve;                            // offset: 44
+        map >> vd;                            // offset: 48
+        map >> speed_accuracy;                // offset: 52
+        map >> horiz_accuracy;                // offset: 56
+        map >> vert_accuracy;                 // offset: 60
+        map >> ignore_flags;                  // offset: 64
+        map >> time_week;                     // offset: 66
+        map >> gps_id;                        // offset: 68
+        map >> fix_type;                      // offset: 69
+        map >> satellites_visible;            // offset: 70
+        map >> yaw;                           // offset: 71
     }
 };
 

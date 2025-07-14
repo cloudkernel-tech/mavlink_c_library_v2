@@ -10998,24 +10998,26 @@ TEST(common, GPS_INPUT)
 
     mavlink::common::msg::GPS_INPUT packet_in{};
     packet_in.time_usec = 93372036854775807ULL;
-    packet_in.gps_id = 185;
-    packet_in.ignore_flags = 20147;
+    packet_in.gps_id = 209;
+    packet_in.ignore_flags = 20563;
     packet_in.time_week_ms = 963497880;
-    packet_in.time_week = 20251;
-    packet_in.fix_type = 252;
+    packet_in.time_week = 20667;
+    packet_in.fix_type = 20;
     packet_in.lat = 963498088;
     packet_in.lon = 963498296;
     packet_in.alt = 157.0;
     packet_in.hdop = 185.0;
     packet_in.vdop = 213.0;
-    packet_in.vn = 241.0;
-    packet_in.ve = 269.0;
-    packet_in.vd = 297.0;
-    packet_in.speed_accuracy = 325.0;
-    packet_in.horiz_accuracy = 353.0;
-    packet_in.vert_accuracy = 381.0;
-    packet_in.satellites_visible = 63;
-    packet_in.yaw = 20511;
+    packet_in.eph = 241.0;
+    packet_in.epv = 269.0;
+    packet_in.vn = 297.0;
+    packet_in.ve = 325.0;
+    packet_in.vd = 353.0;
+    packet_in.speed_accuracy = 381.0;
+    packet_in.horiz_accuracy = 409.0;
+    packet_in.vert_accuracy = 437.0;
+    packet_in.satellites_visible = 87;
+    packet_in.yaw = 20927;
 
     mavlink::common::msg::GPS_INPUT packet1{};
     mavlink::common::msg::GPS_INPUT packet2{};
@@ -11041,6 +11043,8 @@ TEST(common, GPS_INPUT)
     EXPECT_EQ(packet1.alt, packet2.alt);
     EXPECT_EQ(packet1.hdop, packet2.hdop);
     EXPECT_EQ(packet1.vdop, packet2.vdop);
+    EXPECT_EQ(packet1.eph, packet2.eph);
+    EXPECT_EQ(packet1.epv, packet2.epv);
     EXPECT_EQ(packet1.vn, packet2.vn);
     EXPECT_EQ(packet1.ve, packet2.ve);
     EXPECT_EQ(packet1.vd, packet2.vd);
@@ -11060,29 +11064,31 @@ TEST(common_interop, GPS_INPUT)
     memset(&msg, 0, sizeof(msg));
 
     mavlink_gps_input_t packet_c {
-         93372036854775807ULL, 963497880, 963498088, 963498296, 157.0, 185.0, 213.0, 241.0, 269.0, 297.0, 325.0, 353.0, 381.0, 20147, 20251, 185, 252, 63, 20511
+         93372036854775807ULL, 963497880, 963498088, 963498296, 157.0, 185.0, 213.0, 241.0, 269.0, 297.0, 325.0, 353.0, 381.0, 409.0, 437.0, 20563, 20667, 209, 20, 87, 20927
     };
 
     mavlink::common::msg::GPS_INPUT packet_in{};
     packet_in.time_usec = 93372036854775807ULL;
-    packet_in.gps_id = 185;
-    packet_in.ignore_flags = 20147;
+    packet_in.gps_id = 209;
+    packet_in.ignore_flags = 20563;
     packet_in.time_week_ms = 963497880;
-    packet_in.time_week = 20251;
-    packet_in.fix_type = 252;
+    packet_in.time_week = 20667;
+    packet_in.fix_type = 20;
     packet_in.lat = 963498088;
     packet_in.lon = 963498296;
     packet_in.alt = 157.0;
     packet_in.hdop = 185.0;
     packet_in.vdop = 213.0;
-    packet_in.vn = 241.0;
-    packet_in.ve = 269.0;
-    packet_in.vd = 297.0;
-    packet_in.speed_accuracy = 325.0;
-    packet_in.horiz_accuracy = 353.0;
-    packet_in.vert_accuracy = 381.0;
-    packet_in.satellites_visible = 63;
-    packet_in.yaw = 20511;
+    packet_in.eph = 241.0;
+    packet_in.epv = 269.0;
+    packet_in.vn = 297.0;
+    packet_in.ve = 325.0;
+    packet_in.vd = 353.0;
+    packet_in.speed_accuracy = 381.0;
+    packet_in.horiz_accuracy = 409.0;
+    packet_in.vert_accuracy = 437.0;
+    packet_in.satellites_visible = 87;
+    packet_in.yaw = 20927;
 
     mavlink::common::msg::GPS_INPUT packet2{};
 
@@ -11106,6 +11112,8 @@ TEST(common_interop, GPS_INPUT)
     EXPECT_EQ(packet_in.alt, packet2.alt);
     EXPECT_EQ(packet_in.hdop, packet2.hdop);
     EXPECT_EQ(packet_in.vdop, packet2.vdop);
+    EXPECT_EQ(packet_in.eph, packet2.eph);
+    EXPECT_EQ(packet_in.epv, packet2.epv);
     EXPECT_EQ(packet_in.vn, packet2.vn);
     EXPECT_EQ(packet_in.ve, packet2.ve);
     EXPECT_EQ(packet_in.vd, packet2.vd);
